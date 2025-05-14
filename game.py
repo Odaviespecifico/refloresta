@@ -2,10 +2,10 @@ import pygame
 import time
   
 #Variáveis básicas: 
-BACKGROUND_COLOR = (50, 50, 180)
+BACKGROUND_COLOR = (50, 120, 180)
 ALTURA = 360
 LARGURA = 640
-SPEED = 2
+SPEED = 1.5
 GRAVIDADE = 0.2
 TELA = pygame.display.set_mode((LARGURA, ALTURA),flags=pygame.SCALED)
  
@@ -29,7 +29,8 @@ chao = pygame.Rect(10,340,500,5)
 bloco = pygame.Rect(40,300,50,50)
 bloco2 = pygame.Rect(200,150,50,50)
 bloco3 = pygame.Rect(350,150,50,50)
-objetos = [chao,bloco,bloco2,bloco3]
+bloco4 = pygame.Rect(500,150,50,50)
+objetos = [chao,bloco,bloco2,bloco3,bloco4]
         
 #Atualizar o movimento
 colisions =[False,False,False,False] #Top bottom left right
@@ -74,6 +75,7 @@ def move(dx, dy):
             colisions[0],colisions[1] = False,False 
         print(colisions)
 idle_spritesheet = pygame.image.load(r"assets\player\Idle.png")
+run_spritesheet = pygame.image.load(r"assets\player\run.png")
 #width 128
 #height 64
 def load_sprite_sheet(sheet, frame_width=128, frame_height=67):
@@ -86,12 +88,15 @@ def load_sprite_sheet(sheet, frame_width=128, frame_height=67):
 
 #Variáveis básicas da animação
 idle_frames = load_sprite_sheet(idle_spritesheet)
+run_frames = load_sprite_sheet(run_spritesheet)
+
 frame = 0
 frame_index = 0
 animation_speed = 8
 
 flip = False
 
+animation = 0
 
 # game loop 
 while running: 
@@ -108,16 +113,25 @@ while running:
     #For the user input
     keys = pygame.key.get_pressed()
     
+    if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] and mudar == True:
+        animation = 1
+    elif mudar == True:
+        animation = 0
+    
     #Handle key presses
     x_speed = (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * SPEED
     
     if flip == False and keys[pygame.K_LEFT]:
         for i in range(len(idle_frames)):
             idle_frames[i] = pygame.transform.flip(idle_frames[i],True,False)
+        for i in range(len(run_frames)):
+            run_frames[i] = pygame.transform.flip(run_frames[i],True,False)
         flip = True
     if flip == True and keys[pygame.K_RIGHT]:
         for i in range(len(idle_frames)):
             idle_frames[i] = pygame.transform.flip(idle_frames[i],True,False)
+        for i in range(len(run_frames)):
+            run_frames[i] = pygame.transform.flip(run_frames[i],True,False)
         flip = False
     
     player = pygame.Rect((playerpos[0], playerpos[1], playersize[0], playersize[1]))
@@ -137,18 +151,31 @@ while running:
     #chão
     for i in objetos:
         pygame.draw.rect(TELA,(255,255,255),i)
-    
     #Animação do personagem
-    TELA.blit(idle_frames[frame],(playerpos[0]-43,playerpos[1]-5))
     
-    if frame_index % animation_speed == 0:
-        if frame < len(idle_frames)-1 and mudar == True:
-            frame += 1
-            mudar = False
-        if frame and mudar == True:
-            frame = 0
-            mudar = False
-    frame_index += 1
-    
+    match animation:
+        case 0:
+            if frame_index % animation_speed == 0:
+                if frame < len(idle_frames)-1 and mudar == True:
+                    frame += 1
+                    mudar = False
+                if frame and mudar == True:
+                    frame = 0
+                    mudar = False
+            frame_index += 1
+            if frame >= len(idle_frames):
+                frame = 0
+            TELA.blit(idle_frames[frame],(playerpos[0]-43,playerpos[1]-5))
+        case 1:
+            if frame_index % animation_speed == 0:
+                if frame < len(run_frames)-1 and mudar == True:
+                    frame += 1
+                    mudar = False
+                if frame and mudar == True:
+                    frame = 0
+                    mudar = False
+            frame_index += 1
+            TELA.blit(run_frames[frame],(playerpos[0]-43,playerpos[1]-5))
+
     pygame.display.flip() 
     relogio.tick(60)
