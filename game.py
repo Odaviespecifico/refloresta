@@ -84,10 +84,13 @@ def load_sprite_sheet(sheet, frame_width=128, frame_height=67):
         frames.append(frame)
     return frames
 
+#Variáveis básicas da animação
 idle_frames = load_sprite_sheet(idle_spritesheet)
 frame = 0
 frame_index = 0
 animation_speed = 8
+
+flip = False
 
 
 # game loop 
@@ -107,6 +110,15 @@ while running:
     
     #Handle key presses
     x_speed = (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * SPEED
+    
+    if flip == False and keys[pygame.K_LEFT]:
+        for i in range(len(idle_frames)):
+            idle_frames[i] = pygame.transform.flip(idle_frames[i],True,False)
+        flip = True
+    if flip == True and keys[pygame.K_RIGHT]:
+        for i in range(len(idle_frames)):
+            idle_frames[i] = pygame.transform.flip(idle_frames[i],True,False)
+        flip = False
     
     player = pygame.Rect((playerpos[0], playerpos[1], playersize[0], playersize[1]))
     if player.collidelist(objetos) != -1:
