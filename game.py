@@ -1,6 +1,7 @@
 import pygame
 from menu import *
 from Entities import Player
+from utils import Background
 
 class Game():
     def __init__(self):
@@ -18,8 +19,7 @@ class Game():
         self.options = OptionsMenu(self)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
-
-
+        self.background = Background()
         self.jogador = Player()
         
     def game_loop(self):
@@ -30,6 +30,12 @@ class Game():
             if self.START_KEY:
                 self.playing= False
             self.display.fill(self.WHITE)
+            
+            # #Blit the repeating background
+            # for background in self.background.images:
+            #     self.display.blit(background,(self.background.rect.width,0))
+            
+            
             self.jogador.update()
             
             self.jogador.draw(self.display)

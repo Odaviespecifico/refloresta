@@ -1,11 +1,10 @@
-#Spritesheet
-import pygame   
+# Spritesheet
+import pygame,os
 
 class Spritesheet:
     def __init__(self, filename,width=128,height=70):
         self.filename = filename
-        self.sprite_sheet = pygame.image.load(filename).convert()
-        self.sprite_sheet.set_colorkey((0,0,0))
+        self.sprite_sheet = pygame.image.load(filename).convert_alpha()
         self.width = width
         self.height = height
         self.sprites = []
@@ -23,12 +22,19 @@ class Spritesheet:
         print(quantidade)
         return self.sprites
         
+class Background:
+    def __init__(self):
+        self.images = []
+        for image in os.listdir(R'assets\background'):
+            path = R'assets\background' + R"\\"
+            self.images.append(pygame.image.load(path + image))
+        print(self.images)
         
+        # modifica a escala para preencher a tela do jogo
+        for i in range(len(self.images)):
+            self.images[i] = pygame.transform.scale_by(self.images[i],2.1)
+        self.rect = self.images[0].get_rect()
+            
 if __name__ == '__main__':
-    print('teste')
-    run = Spritesheet('assets\player\Run.png')
-    run.get_sprites(1)
-    
-    idle = Spritesheet('assets\player\Idle.png')
-    print(idle.sprites)
-    idle.get_sprites(1)
+    B = Background()
+    print(B.images)

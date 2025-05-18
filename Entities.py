@@ -17,10 +17,10 @@ class Player(pygame.sprite.Sprite):
     def update(self): # Altera a posição, estado e animação do personagem
         self.velocity = 0
         if self.L_Key:
-            self.velocity = -1
+            self.velocity = -2
             self.Flip = True
         if self.R_Key:
-            self.velocity = 1
+            self.velocity = 2
             self.Flip = False
         self.rect.x += self.velocity
         self.set_state()
