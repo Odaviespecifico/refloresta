@@ -169,15 +169,21 @@ class Trash(pygame.sprite.Sprite):
 
 class Arvores():
     def __init__(self):
-        self.tree_list = []
+        self.tree_list = list()
+        self.tree_dict = {}
     def add_tree(self, x,y):
-        self.tree_list.append([x-x%32+18,y,0])
+        try: 
+            self.tree_dict[str((x-x%32+18,y))]
+            print('Já tenho árvore aqui')
+        except KeyError:
+            self.tree_list.append([x-x%32+18,y,0])
+            self.tree_dict[str((x-x%32+18,y))] = 1
+            
         
     def draw_trees (self,screen,offset):
         for tree in self.tree_list:
             pygame.draw.rect(screen,(0,255,0),(tree[0]-offset[0]+43,tree[1]-offset[1]+10,32*tree[2],64*tree[2]))
             tree[2] = min(1,tree[2]+0.1)
-            print(tree[2])
         
 
 if __name__ == '__main__':
