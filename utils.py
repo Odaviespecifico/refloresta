@@ -23,15 +23,20 @@ class Spritesheet:
         return self.sprites
         
 class Background:
-    def __init__(self):
+    def __init__(self,copias):
         self.images = []
-        for image in os.listdir(R'assets\background'):
+        files = (file for file in os.listdir(r'assets\background') if os.path.isfile(os.path.join(r'assets\background', file)))
+        for file in files:
             path = R'assets\background' + R"\\"
-            imagem = pygame.image.load(path + image).convert_alpha()
+            imagem = pygame.image.load(path + file).convert_alpha()
+            superficie = pygame.Surface((imagem.get_width()*copias,imagem.get_height()))#Cria uma superficie para copiar a imagem várias vezes
             imagem.set_colorkey((0,0,0))
-            self.images.append(imagem)
+            for i in range(copias):
+                superficie.blit(imagem,(i*imagem.get_width(),0))
+            superficie.set_colorkey((0,0,0))
+            self.images.append(superficie)
         for index in range(len(self.images)):
-            self.images[index] = pygame.transform.scale_by(self.images[index],3.2)
+            self.images[index] = pygame.transform.scale_by(self.images[index],2)
         
         print(self.images)
         

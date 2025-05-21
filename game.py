@@ -20,7 +20,7 @@ class Game():
         self.options = OptionsMenu(self)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
-        self.background = Background()
+        self.background = Background(5)
         self.jogador = Player()
         self.map = TileMap('assets\maps\map2.csv')
         
@@ -55,11 +55,12 @@ class Game():
             #     self.scroll[0] = 7*32
                 
             #Blit the repeating background
-            i = 1
+            i = 2
             for background in self.background.images:
-                self.display.blit(background,((0-self.scroll[0]/10*i)-150,0))
+                self.display.blit(background,((-300)-self.scroll[0]*i/10,0))
                 i += 1
-            
+                
+            #Renderizar o tilemap
             self.display.blit(self.map.surface,(0-self.scroll[0],-self.scroll[1]))
             
             self.jogador.update(self.SPACE_KEY,self.map.rectlist)
