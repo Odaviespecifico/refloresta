@@ -26,6 +26,7 @@ class Game():
         
     def game_loop(self):
         self.scroll = [0,0]
+        yspeed = 0
         while self.playing:
             
             self.clock.tick(60)
@@ -34,25 +35,38 @@ class Game():
             if self.START_KEY:
                 self.playing= False
             
-            self.display.fill(self.WHITE)
+            self.display.fill(self.BLACK)
             
-            #Camera
-            camera_offset = [
-                +self.jogador.rect.centerx - self.display.get_rect().centerx,
-                +self.jogador.rect.centery - self.display.get_rect().centery
-            ]
-            
+            # Camera
             self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 30
             self.scroll[1] += (self.jogador.rect.y - self.display.get_height() / 2 - self.scroll[1]) / 30
+            
+            if self.jogador.rect.x < 334 and self.scroll[0] > 0:
+                self.scroll[0] -= 0.5
+            if self.jogador.rect.x < 334 and self.scroll[0] < 0:
+                self.scroll[0] = 0
             
             #Blit the repeating background
             for background in self.background.images:
                 self.display.blit(background,((0),0))
             
-            self.display.blit(self.map.surface,(0-self.scroll[0],-32*6))
+            self.display.blit(self.map.surface,(0-self.scroll[0],-self.scroll[1]))
             
             self.jogador.update()
             
+            #Gravidade
+            self.jogador.rect.y += yspeed
+            yspeed += 2
+            #Colisão com retângulos
+            
+            playerrect = pygame.Rect(self.jogador.rect[0]+40,self.jogador.rect[1],32,70)
+            
+            pygame.draw.rect(self.display,(255,255,0),playerrect)
+            
+            rectcolide = playerrect.collidelistall(self.map.rectlist)
+            
+            
+            print(rectcolide)
             self.jogador.draw(self.display,self.scroll)
             self.window.blit(self.display, (0,0))
             pygame.display.update()

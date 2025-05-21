@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.L_Key,self.R_Key,self.Flip = False,False,False
         self.load_frames()
-        self.rect = self.idle_frames_right[0].get_rect()
+        self.rect = pygame.Rect(32,0,32,70)
         self.rect.y = 360 - 80
         self.current_frame = 0
         self.last_updated = 0 
@@ -17,12 +17,15 @@ class Player(pygame.sprite.Sprite):
     def update(self): # Altera a posição, estado e animação do personagem
         self.velocity = 0
         if self.L_Key:
-            self.velocity = -2
+            self.velocity = -4
             self.Flip = True
         if self.R_Key:
-            self.velocity = 2
+            self.velocity = 4
             self.Flip = False
+            
         self.rect.x += self.velocity
+        
+        
         self.set_state()
         self.animate()
         
@@ -39,7 +42,6 @@ class Player(pygame.sprite.Sprite):
             self.state = 'run'
             
     def animate(self):
-        
         now = pygame.time.get_ticks()
         if self.state == 'idle':  # personagem fica parado
             if now - self.last_updated > 1000/len(self.idle_frames_right):

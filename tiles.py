@@ -11,7 +11,7 @@ class TileMap():
             self.tiles.append(pygame.image.load(fr'assets\Tiles\{tileimage}'))
         self.tiles.pop()
         self.putinasurface()
-        
+        self.gettilerects()
         
     #Ler CSV e tranformar em lista de listas
     #para cada item colocar um item na lista
@@ -22,7 +22,6 @@ class TileMap():
         with open(self.map,'r') as map:
             for row in csv.reader(map,delimiter=','):
                 tilemap.append(row)
-        print(tilemap)
         return tilemap
 
     def putinasurface(self):
@@ -32,15 +31,30 @@ class TileMap():
                 if column != '-1':
                     print(self.tiles[int(column)])
                     print(x,y)
-                    self.surface.blit(self.tiles[int(column)],(y*32,x*32))
+                    self.surface.blit(self.tiles[int(column)],(y*32,x*32-32*6))
                 else:
                     print('sou vazio')
                 y += 1
             x += 1
             y = 0
+            
+    def gettilerects(self):
+        print(self.tilemap)
+        self.rectlist = []
+        x,y = 0,0
+        for line in self.tilemap:
+            for column in line:
+                if column != '-1':
+                    self.rectlist.append((y*32,x*32-32*6,32,32))
+                else:
+                    print('sou vazio')
+                y += 1
+            x += 1
+            y = 0
+        print(self.rectlist)
                 
     
         
 if __name__ == '__main__':
     t = TileMap(r'assets\maps\map1.csv')
-    t.ler_csv()
+    t.gettilerects()
