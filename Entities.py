@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random,os
 from utils import Spritesheet, TileMap
 
 class Player(pygame.sprite.Sprite):
@@ -171,6 +171,11 @@ class Arvores():
     def __init__(self):
         self.tree_list = list()
         self.tree_dict = {}
+        self.images = []
+        for file in os.listdir(r'assets\Arvore\Growing Tree'):
+            image = pygame.image.load(fr'assets\Arvore\Growing Tree\{file}').convert_alpha()
+            image = pygame.transform.scale_by(image,2)
+            self.images.append(image)
     def add_tree(self, x,y):
         try: 
             self.tree_dict[str((x-x%32+18,y))]
@@ -180,10 +185,10 @@ class Arvores():
             self.tree_dict[str((x-x%32+18,y))] = 1
             
         
-    def draw_trees (self,screen,offset):
+    def draw_trees (self,screen:pygame.Surface,offset):
         for tree in self.tree_list:
-            pygame.draw.rect(screen,(0,255,0),(tree[0]-offset[0]+43,tree[1]-offset[1]+10,32*tree[2],64*tree[2]))
-            tree[2] = min(1,tree[2]+0.1)
+            screen.blit(self.images[tree[2]],((tree[0]-offset[0]-152,tree[1]-offset[1]-155)))
+            tree[2] = min(82,tree[2]+1)
         
 
 if __name__ == '__main__':
