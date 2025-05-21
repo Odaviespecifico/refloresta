@@ -31,10 +31,10 @@ class Background:
         print(self.images)
         
         # modifica a escala para preencher a tela do jogo
-        for i in range(len(self.images)):
-            self.images[i] = pygame.transform.scale_by(self.images[i],2.1)
         self.rect = self.images[0].get_rect()
             
 if __name__ == '__main__':
     B = Background()
     print(B.images)
+    
+    

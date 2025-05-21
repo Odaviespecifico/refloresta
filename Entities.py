@@ -26,8 +26,8 @@ class Player(pygame.sprite.Sprite):
         self.set_state()
         self.animate()
         
-    def draw(self,screen):
-        screen.blit(self.current_image,self.rect)
+    def draw(self,screen,offset):
+        screen.blit(self.current_image,(self.rect.x-offset[0],self.rect.y-offset[1]))
         
     def set_state(self):
         self.state = 'idle'
@@ -37,7 +37,6 @@ class Player(pygame.sprite.Sprite):
         if self.velocity < 0:
             self.Flip = True
             self.state = 'run'
-        print(self.Flip)
             
     def animate(self):
         
@@ -49,10 +48,8 @@ class Player(pygame.sprite.Sprite):
             if self.current_frame >= len(self.idle_frames_left):
                 self.current_frame = 0
             if self.Flip:
-                print(self.current_frame)
                 self.current_image = self.idle_frames_left[self.current_frame]
             else:
-                print(self.current_frame)
                 self.current_image = self.idle_frames_right[self.current_frame]
         if self.state == 'run':  # personagem corre
             if now - self.last_updated > 1000/len(self.run_frames_right):

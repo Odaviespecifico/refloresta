@@ -2,13 +2,14 @@ import pygame
 from menu import *
 from Entities import Player
 from utils import Background
+from tiles import *
 
 class Game():
     def __init__(self):
         pygame.init()
         self.running, self.playing = True, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        scale = 40
+        scale = 50
         self.DISPLAY_W, self.DISPLAY_H = 16*scale, 9*scale
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.clock = pygame.time.Clock()
@@ -21,24 +22,38 @@ class Game():
         self.curr_menu = self.main_menu
         self.background = Background()
         self.jogador = Player()
+        self.map = TileMap('assets\maps\map1.csv')
         
     def game_loop(self):
-        self.clock.tick(60)
+        self.scroll = [0,0]
         while self.playing:
+            
+            self.clock.tick(60)
             
             self.check_events()
             if self.START_KEY:
                 self.playing= False
+            
             self.display.fill(self.WHITE)
             
-            # #Blit the repeating background
-            # for background in self.background.images:
-            #     self.display.blit(background,(self.background.rect.width,0))
+            #Camera
+            camera_offset = [
+                +self.jogador.rect.centerx - self.display.get_rect().centerx,
+                +self.jogador.rect.centery - self.display.get_rect().centery
+            ]
             
+            self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 30
+            self.scroll[1] += (self.jogador.rect.y - self.display.get_height() / 2 - self.scroll[1]) / 30
+            
+            #Blit the repeating background
+            for background in self.background.images:
+                self.display.blit(background,((0),0))
+            
+            self.display.blit(self.map.surface,(0-self.scroll[0],-32*6))
             
             self.jogador.update()
             
-            self.jogador.draw(self.display)
+            self.jogador.draw(self.display,self.scroll)
             self.window.blit(self.display, (0,0))
             pygame.display.update()
             # print(self.jogador.L_Key,self.jogador.R_key)
@@ -61,7 +76,6 @@ class Game():
                     case pygame.K_UP:
                         self.UP_KEY = True
                     case pygame.K_RIGHT:
-                        print('direita')
                         self.jogador.R_Key = True
                     case pygame.K_LEFT:
                         self.jogador.L_Key = True
