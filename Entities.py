@@ -188,7 +188,7 @@ class Arvores():
     def draw_trees (self,screen:pygame.Surface,offset):
         for tree in self.tree_list:
             screen.blit(self.images[tree[2]],((tree[0]-offset[0]-152,tree[1]-offset[1]-155)))
-            tree[2] = min(len(self.images-1),tree[2]+1)
+            tree[2] = min(len(self.images)-1,tree[2]+1)
         
 
 if __name__ == '__main__':

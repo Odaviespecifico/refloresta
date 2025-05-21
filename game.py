@@ -35,8 +35,8 @@ class Game():
         opacidade = 0
         while self.playing:
             
-            self.clock.tick(60)
-            # print(self.clock.get_fps()) #Mostrar FPS
+            self.clock.tick(400)
+            print(self.clock.get_fps()) #Mostrar FPS
             
             self.check_events()
             if self.START_KEY:
