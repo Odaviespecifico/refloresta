@@ -13,17 +13,52 @@ class Player(pygame.sprite.Sprite):
         self.velocity = 0 
         self.state = 'idle'
         self.current_image = self.idle_frames_right[0]
+        self.velocity_y,self.velocity_x = 0,0
         
-    def update(self): # Altera a posição, estado e animação do personagem
-        self.velocity = 0
+    def update(self,jump,tilerects): # Altera a posição, estado e animação do personagem
+        self.velocity_x = 0
         if self.L_Key:
-            self.velocity = -4
+            self.velocity_x = -10
             self.Flip = True
         if self.R_Key:
-            self.velocity = 4
+            self.velocity_x = 10
             self.Flip = False
+        if jump:
+            self.velocity_y = -15
+            # self.rect.top -= 15
             
-        self.rect.x += self.velocity
+        self.rect.x += self.velocity_x
+        
+        if self.Flip:
+            phisicsrect = pygame.Rect(self.rect[0]+50,self.rect[1],32,70)
+        else:
+            phisicsrect = pygame.Rect(self.rect[0]+40,self.rect[1],32,70)
+            
+        if phisicsrect.collidelistall(tilerects):
+            if self.velocity_x > 0:
+                    self.rect.right = tilerects[phisicsrect.collidelist(tilerects)][0] - 40
+            if self.velocity_x < 0:
+                self.rect.left = pygame.Rect(tilerects[phisicsrect.collidelist(tilerects)]).right -50
+                
+        self.velocity_y += 0.5
+        self.rect.y += self.velocity_y
+        
+        if self.Flip:
+            phisicsrect = pygame.Rect(self.rect[0]+50,self.rect[1],32,70)
+        else:
+            phisicsrect = pygame.Rect(self.rect[0]+40,self.rect[1],32,70)
+            
+        if phisicsrect.collidelistall(tilerects):
+            if self.velocity_y > 0:
+                    self.rect.bottom = pygame.Rect(tilerects[phisicsrect.collidelist(tilerects)]).top
+                    self.velocity_y = 0
+                    
+            if self.velocity_y < 0:
+                    self.rect.top = tilerects[phisicsrect.collidelist(tilerects)][1]+32
+                    self.velocity_y = 0
+        
+        
+        
         
         
         self.set_state()
@@ -34,10 +69,10 @@ class Player(pygame.sprite.Sprite):
         
     def set_state(self):
         self.state = 'idle'
-        if self.velocity > 0:
+        if self.velocity_x > 0:
             self.Flip = False
             self.state = 'run'
-        if self.velocity < 0:
+        if self.velocity_x < 0:
             self.Flip = True
             self.state = 'run'
             
@@ -74,6 +109,5 @@ class Player(pygame.sprite.Sprite):
         self.idle_frames_left = []
         for frame in self.idle_frames_right:
             self.idle_frames_left.append(pygame.transform.flip(frame,True,False))
-        print(self.idle_frames_left)
         
     

@@ -27,6 +27,7 @@ class Game():
     def game_loop(self):
         self.scroll = [0,0]
         yspeed = 0
+        GRAVIDADE = 0.5
         while self.playing:
             
             self.clock.tick(60)
@@ -35,41 +36,38 @@ class Game():
             if self.START_KEY:
                 self.playing= False
             
-            self.display.fill(self.BLACK)
+            self.display.fill(self.WHITE)
             
             # Camera
-            self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 30
-            self.scroll[1] += (self.jogador.rect.y - self.display.get_height() / 2 - self.scroll[1]) / 30
+            self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 15
+            self.scroll[1] += (self.jogador.rect.y - self.display.get_height() / 2 - self.scroll[1]) / 15
             
             if self.jogador.rect.x < 334 and self.scroll[0] > 0:
                 self.scroll[0] -= 0.5
             if self.jogador.rect.x < 334 and self.scroll[0] < 0:
                 self.scroll[0] = 0
             
+            print(self.jogador.rect.x)
+            print(self.scroll)
+            if self.jogador.rect.x > 562 and self.scroll[0] > 0:
+                self.scroll[0] += 0.5
+            if self.jogador.rect.x > 562 and self.scroll[0] > 225:
+                self.scroll[0] = 225
+                
             #Blit the repeating background
             for background in self.background.images:
                 self.display.blit(background,((0),0))
             
             self.display.blit(self.map.surface,(0-self.scroll[0],-self.scroll[1]))
             
-            self.jogador.update()
+            self.jogador.update(self.SPACE_KEY,self.map.rectlist)
             
-            #Gravidade
-            self.jogador.rect.y += yspeed
-            yspeed += 2
-            #Colisão com retângulos
+            # for rect in self.map.rectlist:
+            #     pygame.draw.rect(self.display,(255,0,255),(rect[0]-self.scroll[0],rect[1]-self.scroll[1],32,32))
             
-            playerrect = pygame.Rect(self.jogador.rect[0]+40,self.jogador.rect[1],32,70)
-            
-            pygame.draw.rect(self.display,(255,255,0),playerrect)
-            
-            rectcolide = playerrect.collidelistall(self.map.rectlist)
-            
-            
-            print(rectcolide)
             self.jogador.draw(self.display,self.scroll)
-            self.window.blit(self.display, (0,0))
             pygame.display.update()
+            self.window.blit(self.display, (0,0))
             # print(self.jogador.L_Key,self.jogador.R_key)
             self.reset_keys()
 
@@ -89,6 +87,8 @@ class Game():
                         self.DOWN_KEY = True
                     case pygame.K_UP:
                         self.UP_KEY = True
+                    case pygame.K_SPACE:
+                        self.SPACE_KEY = True
                     case pygame.K_RIGHT:
                         self.jogador.R_Key = True
                     case pygame.K_LEFT:
@@ -103,7 +103,7 @@ class Game():
                     
 
     def reset_keys(self):
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY = False, False, False, False, False
 
     def draw_text(self, text, size, x, y ):
         font = pygame.font.Font(self.font_name,size)
