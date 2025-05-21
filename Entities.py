@@ -1,6 +1,5 @@
 import pygame, random
-from utils import Spritesheet
-from tiles import TileMap
+from utils import Spritesheet, TileMap
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
