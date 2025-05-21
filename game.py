@@ -9,11 +9,11 @@ class Game():
         pygame.init()
         self.running, self.playing = True, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        scale = 50
+        scale = 60
         self.DISPLAY_W, self.DISPLAY_H = 16*scale, 9*scale
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.clock = pygame.time.Clock()
-        self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)),flags=pygame.SCALED)
+        self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)))
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.main_menu = MainMenu(self)
@@ -22,7 +22,7 @@ class Game():
         self.curr_menu = self.main_menu
         self.background = Background()
         self.jogador = Player()
-        self.map = TileMap('assets\maps\map1.csv')
+        self.map = TileMap('assets\maps\map2.csv')
         
     def game_loop(self):
         self.scroll = [0,0]
@@ -31,32 +31,34 @@ class Game():
         while self.playing:
             
             self.clock.tick(60)
+            print(self.clock.get_fps())
             
             self.check_events()
             if self.START_KEY:
                 self.playing= False
             
-            self.display.fill(self.WHITE)
+            self.display.fill((45, 142, 193))
             
             # Camera
             self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 15
             self.scroll[1] += (self.jogador.rect.y - self.display.get_height() / 2 - self.scroll[1]) / 15
             
-            if self.jogador.rect.x < 334 and self.scroll[0] > 0:
-                self.scroll[0] -= 0.5
-            if self.jogador.rect.x < 334 and self.scroll[0] < 0:
-                self.scroll[0] = 0
+            #Para fixar a câmera em um dos cantos
+            # if self.jogador.rect.x < 10*32 and self.scroll[0] > 0:
+            #     self.scroll[0] -= 0.5
+            # if self.jogador.rect.x < 10*32 and self.scroll[0] < 0:
+            #     self.scroll[0] = 0
             
-            print(self.jogador.rect.x)
-            print(self.scroll)
-            if self.jogador.rect.x > 562 and self.scroll[0] > 0:
-                self.scroll[0] += 0.5
-            if self.jogador.rect.x > 562 and self.scroll[0] > 225:
-                self.scroll[0] = 225
+            # if self.jogador.rect.x > 562 and self.scroll[0] > 0:
+            #     self.scroll[0] += 0.5
+            # if self.jogador.rect.x > 562 and self.scroll[0] > 7*32:
+            #     self.scroll[0] = 7*32
                 
             #Blit the repeating background
+            i = 1
             for background in self.background.images:
-                self.display.blit(background,((0),0))
+                self.display.blit(background,((0-self.scroll[0]/10*i)-150,0))
+                i += 1
             
             self.display.blit(self.map.surface,(0-self.scroll[0],-self.scroll[1]))
             

@@ -27,7 +27,12 @@ class Background:
         self.images = []
         for image in os.listdir(R'assets\background'):
             path = R'assets\background' + R"\\"
-            self.images.append(pygame.image.load(path + image))
+            imagem = pygame.image.load(path + image).convert_alpha()
+            imagem.set_colorkey((0,0,0))
+            self.images.append(imagem)
+        for index in range(len(self.images)):
+            self.images[index] = pygame.transform.scale_by(self.images[index],3.2)
+        
         print(self.images)
         
         # modifica a escala para preencher a tela do jogo

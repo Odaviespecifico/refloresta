@@ -8,7 +8,7 @@ class TileMap():
         self.surface.set_colorkey((0,0,0))
         self.tiles = []
         for tileimage in os.listdir('assets\Tiles'):
-            self.tiles.append(pygame.image.load(fr'assets\Tiles\{tileimage}'))
+            self.tiles.append(pygame.image.load(fr'assets\Tiles\{tileimage}').convert_alpha())
         self.tiles.pop()
         self.putinasurface()
         self.gettilerects()
