@@ -1,8 +1,7 @@
 import pygame
 from menu import *
 from Entities import Player,Trash
-from utils import Background
-from tiles import *
+from utils import Background,TileMap
 
 class Game():
     def __init__(self):
