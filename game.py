@@ -13,7 +13,8 @@ class Game():
         self.DISPLAY_W, self.DISPLAY_H = 16*scale, 9*scale
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.clock = pygame.time.Clock()
-        self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)))
+        self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)),flags=pygame.SCALED)
+        # self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)),flags=pygame.FULLSCREEN|pygame.SCALED)
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.main_menu = MainMenu(self)
@@ -25,6 +26,7 @@ class Game():
         self.map = TileMap('assets\maps\map2.csv')
         self.trash = Trash(self.map.toprectlist)
         self.pontuação = 0
+        self.fullscreen = False
         
     def game_loop(self):
         self.scroll = [0,0]
@@ -124,6 +126,7 @@ class Game():
                         self.jogador.L_Key = True
                     case pygame.K_LSHIFT:
                         self.jogador.SHIFT = True
+                            
                         
             if event.type == pygame.KEYUP:
                 match event.key:
@@ -134,6 +137,16 @@ class Game():
                     case pygame.K_LSHIFT:
                         self.jogador.SHIFT = False
                         self.jogador.speed_mult = 1
+                    case pygame.K_f:
+                        match self.fullscreen:
+                            case True:
+                                pygame.display.toggle_fullscreen()
+                                self.fullscreen = False
+                                break
+                            case False:
+                                pygame.display.toggle_fullscreen()
+                                self.fullscreen = True
+                                break
                     
 
     def reset_keys(self):
