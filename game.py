@@ -24,11 +24,13 @@ class Game():
         self.jogador = Player()
         self.map = TileMap('assets\maps\map2.csv')
         self.trash = Trash(self.map.toprectlist)
+        self.pontuação = 0
         
     def game_loop(self):
         self.scroll = [0,0]
         yspeed = 0
         GRAVIDADE = 0.5
+        opacidade = 0
         while self.playing:
             
             self.clock.tick(60)
@@ -60,8 +62,10 @@ class Game():
             for background in self.background.images:
                 self.display.blit(background,((-300)-self.scroll[0]*i/10,0))
                 i += 1
-                
-                
+            filtro = pygame.surface.Surface((self.DISPLAY_W,self.DISPLAY_H))
+            filtro.set_alpha(opacidade)
+            filtro.fill((0,255,255))
+            self.display.blit(filtro,(0,0))
             
             #Renderizar o tilemap
             self.display.blit(self.map.surface,(0-self.scroll[0],-self.scroll[1]))
@@ -69,7 +73,7 @@ class Game():
             #Atualizar o movimento do jogador
             self.jogador.update(self.SPACE_KEY,self.map.rectlist)
             
-            #Renderizar o lixo
+            #Renderizar e coletar o lixo
             self.trash.draw(self.display,self.scroll)
             
             if self.jogador.Flip:
@@ -77,13 +81,14 @@ class Game():
             else:
                 phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],32,70)
             if phisicsrect.collidelist(self.trash.rects) != -1:
-                print(f'colidiu com o indice {phisicsrect.collidelist(self.trash.rects)}')
                 colidedrect = self.trash.rects[phisicsrect.collidelist(self.trash.rects)]
                 pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32))
                 if self.E_Key:
                     self.trash.rects.pop(phisicsrect.collidelist(self.trash.rects))
+                    self.pontuação += 1
+                    print(f'Sua pontuação atual é: {self.pontuação}')
+                    opacidade = min(60,opacidade + 3)
                 
-            print(self.trash.rects)
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
             

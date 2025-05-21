@@ -120,7 +120,10 @@ class Trash(pygame.sprite.Sprite):
             posição = random.randint(0,len(tilemap))
             self.posições.add(posição)    
         for i in self.posições:
-            self.rects.append(pygame.Rect(self.tiles[i][0],self.tiles[i][1]-32,32,32))
+            try:
+                self.rects.append(pygame.Rect(self.tiles[i][0],self.tiles[i][1]-32,32,32))
+            except:
+                self.__init__
         
     
     def draw(self,display:pygame.Surface,offset,):
