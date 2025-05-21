@@ -1,87 +1,146 @@
 import pygame
-import time
-  
-#Variáveis básicas: 
-BACKGROUND_COLOR = (50, 50, 180)
-ALTURA = 360
-LARGURA = 640
-SPEED = 2
-GRAVIDADE = 0.5
-TELA = pygame.display.set_mode((LARGURA, ALTURA),flags=pygame.SCALED)
- 
-x_speed = 0
-y_speed = 0
-dx=0
+from menu import *
+from Entities import Player,Trash
+from utils import Background
+from tiles import *
 
-relogio = pygame.time.Clock()
-
-fullscreen = True 
-# Set the caption of the screen 
-pygame.display.set_caption('Refloresta') 
-
-
-# Variable to keep our game loop running 
-running = True
-playersize = [20, 20]
-playerpos = [0, 0]
-
-chao = pygame.Rect(10,340,500,5)
-bloco = pygame.Rect(10,300,50,50)
-#Atualizar o movimento
-def move(dx, dy):   
-    playerpos[1] += dy
-    player = pygame.Rect((playerpos[0], playerpos[1], playersize[0], playersize[1]))
-    if player.colliderect(chao):
-        if dy > 0:
-            player.bottom = chao.top + 1
-            playerpos[1] = player.top
-
-    playerpos[0] += dx
-    player = pygame.Rect((playerpos[0], playerpos[1], playersize[0], playersize[1]))
-    if player.colliderect(chao) and player.bottom != chao.top + 1:
-        if dx > 0:
-            player.right = chao.left
-            playerpos[0] = player.left
-        if dx < 0:
-            player.left = chao.right
-            playerpos[0] = player.left
+class Game():
+    def __init__(self):
+        pygame.init()
+        self.running, self.playing = True, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+        scale = 60
+        self.DISPLAY_W, self.DISPLAY_H = 16*scale, 9*scale
+        self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
+        self.clock = pygame.time.Clock()
+        self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)))
+        self.font_name = pygame.font.get_default_font()
+        self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
+        self.main_menu = MainMenu(self)
+        self.options = OptionsMenu(self)
+        self.credits = CreditsMenu(self)
+        self.curr_menu = self.main_menu
+        self.background = Background(5)
+        self.jogador = Player()
+        self.map = TileMap('assets\maps\map2.csv')
+        self.trash = Trash(self.map.toprectlist)
+        self.pontuação = 0
+        
+    def game_loop(self):
+        self.scroll = [0,0]
+        yspeed = 0
+        GRAVIDADE = 0.5
+        opacidade = 0
+        while self.playing:
             
-# game loop 
-while running: 
-    TELA.fill(BACKGROUND_COLOR) #Clear the screen
-# for loop through the event queue   
-    
-    for event in pygame.event.get(): 
-      
-        # Check for QUIT event       
-        if event.type == pygame.QUIT: 
-            running = False
-
-    #For the user input
-    keys = pygame.key.get_pressed()
-    
-    #Handle key presses
-    x_speed = (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * SPEED
-    
-    player = pygame.Rect((playerpos[0], playerpos[1], playersize[0], playersize[1]))
-    if player.colliderect(chao):
-        print('colidiu')
-        if keys[pygame.K_SPACE]:
-            y_speed = -10
-        else:
-            y_speed = 0
+            self.clock.tick(60)
+            # print(self.clock.get_fps()) #Mostrar FPS
             
-    if not player.colliderect(chao):
-        y_speed += GRAVIDADE
-    
-    move(x_speed,y_speed)
-    #Player
-    pygame.draw.rect(TELA,(255,255,0),(playerpos[0], playerpos[1], playersize[0], playersize[1]))
-    
-    #chão
-    pygame.draw.rect(TELA,(255,255,255),chao)
-    pygame.draw.rect(TELA,(255,255,255),bloco)
-    
-    pygame.display.flip() 
-    
-    relogio.tick(60)
+            self.check_events()
+            if self.START_KEY:
+                self.playing= False
+            
+            self.display.fill((45, 142, 193))
+            
+            # Camera
+            self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 15
+            self.scroll[1] += (self.jogador.rect.y - self.display.get_height() / 2 - self.scroll[1]) / 15
+            
+            #Para fixar a câmera em um dos cantos
+            # if self.jogador.rect.x < 10*32 and self.scroll[0] > 0:
+            #     self.scroll[0] -= 0.5
+            # if self.jogador.rect.x < 10*32 and self.scroll[0] < 0:
+            #     self.scroll[0] = 0
+            
+            # if self.jogador.rect.x > 562 and self.scroll[0] > 0:
+            #     self.scroll[0] += 0.5
+            # if self.jogador.rect.x > 562 and self.scroll[0] > 7*32:
+            #     self.scroll[0] = 7*32
+                
+            #Blit the repeating background
+            i = 2
+            for background in self.background.images:
+                self.display.blit(background,((-300)-self.scroll[0]*i/10,0))
+                i += 1
+            filtro = pygame.surface.Surface((self.DISPLAY_W,self.DISPLAY_H))
+            filtro.set_alpha(opacidade)
+            filtro.fill((0,255,255))
+            self.display.blit(filtro,(0,0))
+            
+            #Renderizar o tilemap
+            self.display.blit(self.map.surface,(0-self.scroll[0],-self.scroll[1]))
+            
+            #Atualizar o movimento do jogador
+            self.jogador.update(self.SPACE_KEY,self.map.rectlist)
+            
+            #Renderizar e coletar o lixo
+            self.trash.draw(self.display,self.scroll)
+            
+            if self.jogador.Flip:
+                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],32,70)
+            else:
+                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],32,70)
+            if phisicsrect.collidelist(self.trash.rects) != -1:
+                colidedrect = self.trash.rects[phisicsrect.collidelist(self.trash.rects)]
+                pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32))
+                if self.E_Key:
+                    self.trash.rects.pop(phisicsrect.collidelist(self.trash.rects))
+                    self.pontuação += 1
+                    print(f'Sua pontuação atual é: {self.pontuação}')
+                    opacidade = min(60,opacidade + 3)
+                
+            #Renderizar o jogador
+            self.jogador.draw(self.display,self.scroll)
+            
+            #atualizar a tela
+            pygame.display.update()
+            self.window.blit(self.display, (0,0))
+            # print(self.jogador.L_Key,self.jogador.R_key)
+            self.reset_keys()
+
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running, self.playing = False, False
+                self.curr_menu.run_display = False
+                
+            if event.type == pygame.KEYDOWN:
+                match event.key:
+                    case pygame.K_RETURN:
+                        self.START_KEY = True
+                    case pygame.K_BACKSPACE:
+                        self.BACK_KEY = True
+                    case pygame.K_DOWN:
+                        self.DOWN_KEY = True
+                    case pygame.K_UP:
+                        self.UP_KEY = True
+                    case pygame.K_SPACE:
+                        self.SPACE_KEY = True
+                    case pygame.K_RIGHT:
+                        self.jogador.R_Key = True
+                    case pygame.K_LEFT:
+                        self.jogador.L_Key = True
+                    case pygame.K_e:
+                        self.E_Key = True
+                        
+            if event.type == pygame.KEYUP:
+                match event.key:
+                    case pygame.K_LEFT:
+                        self.jogador.L_Key = False
+                    case pygame.K_RIGHT:
+                        self.jogador.R_Key = False
+                    
+
+    def reset_keys(self):
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key = False, False, False, False, False, False
+
+    def draw_text(self, text, size, x, y ):
+        font = pygame.font.Font(self.font_name,size)
+        text_surface = font.render(text, True, self.WHITE)
+        text_rect = text_surface.get_rect()
+        text_rect.center = (x,y)
+        self.display.blit(text_surface,text_rect)
+
+
+
+
