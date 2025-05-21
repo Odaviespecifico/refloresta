@@ -116,12 +116,14 @@ class Game():
                         self.UP_KEY = True
                     case pygame.K_SPACE:
                         self.SPACE_KEY = True
+                    case pygame.K_e:
+                        self.E_Key = True
                     case pygame.K_RIGHT:
                         self.jogador.R_Key = True
                     case pygame.K_LEFT:
                         self.jogador.L_Key = True
-                    case pygame.K_e:
-                        self.E_Key = True
+                    case pygame.K_LSHIFT:
+                        self.jogador.SHIFT = True
                         
             if event.type == pygame.KEYUP:
                 match event.key:
@@ -129,6 +131,9 @@ class Game():
                         self.jogador.L_Key = False
                     case pygame.K_RIGHT:
                         self.jogador.R_Key = False
+                    case pygame.K_LSHIFT:
+                        self.jogador.SHIFT = False
+                        self.jogador.speed_mult = 1
                     
 
     def reset_keys(self):

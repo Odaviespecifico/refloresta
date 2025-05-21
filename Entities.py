@@ -6,12 +6,15 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.L_Key,self.R_Key,self.Flip = False,False,False
+        self.SHIFT = False
         self.load_frames()
         self.rect = pygame.Rect(32,0,32,70)
         self.rect.y = 360 - 80
         self.current_frame = 0
         self.last_updated = 0 
         self.velocity = 0 
+        self.speed = 5
+        self.speed_mult = 1
         self.state = 'idle'
         self.current_image = self.idle_frames_right[0]
         self.velocity_y,self.velocity_x = 0,0
@@ -19,10 +22,18 @@ class Player(pygame.sprite.Sprite):
     def update(self,jump,tilerects): # Altera a posição, estado e animação do personagem
         self.velocity_x = 0
         if self.L_Key:
-            self.velocity_x = -10
+            if self.SHIFT:
+                self.velocity_x = -self.speed * self.speed_mult
+                self.speed_mult = min(2, self.speed_mult + 0.2)
+            else:
+                self.velocity_x = -self.speed
             self.Flip = True
         if self.R_Key:
-            self.velocity_x = 10
+            if self.SHIFT:
+                self.velocity_x = self.speed * self.speed_mult
+                self.speed_mult = min(2, self.speed_mult + 0.2)
+            else:
+                self.velocity_x = self.speed
             self.Flip = False
         if jump:
             self.velocity_y = -15
@@ -70,11 +81,17 @@ class Player(pygame.sprite.Sprite):
         self.state = 'idle'
         if self.velocity_x > 0:
             self.Flip = False
-            self.state = 'run'
+            if self.velocity_x > 5:
+                self.state = 'run'
+            else:
+                self.state = 'walk'
         if self.velocity_x < 0:
             self.Flip = True
-            self.state = 'run'
-            
+            if self.velocity_x < -5:
+                self.state = 'run'
+            else:
+                self.state = 'walk'
+                
     def animate(self):
         now = pygame.time.get_ticks()
         if self.state == 'idle':  # personagem fica parado
@@ -95,6 +112,15 @@ class Player(pygame.sprite.Sprite):
                 self.current_image = self.run_frames_left[self.current_frame]
             else:
                 self.current_image = self.run_frames_right[self.current_frame]
+                
+        if self.state == 'walk':  # personagem anda
+            if now - self.last_updated > 1000/len(self.walk_frames_right):
+                self.last_updated = now
+                self.current_frame = (self.current_frame+1) % len(self.walk_frames_right)
+            if self.Flip:
+                self.current_image = self.walk_frames_left[self.current_frame]
+            else:
+                self.current_image = self.walk_frames_right[self.current_frame]
             
     def load_frames(self):
         spritesheet_run = Spritesheet('assets\player\Run.png')
@@ -108,6 +134,12 @@ class Player(pygame.sprite.Sprite):
         self.idle_frames_left = []
         for frame in self.idle_frames_right:
             self.idle_frames_left.append(pygame.transform.flip(frame,True,False))
+            
+        spritesheet_walk = Spritesheet('assets\player\Walk.png')
+        self.walk_frames_right = spritesheet_walk.get_sprites()
+        self.walk_frames_left = []
+        for frame in self.walk_frames_right:
+            self.walk_frames_left.append(pygame.transform.flip(frame,True,False))
         
     
 class Trash(pygame.sprite.Sprite):
