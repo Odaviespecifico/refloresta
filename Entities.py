@@ -18,10 +18,12 @@ class Player(pygame.sprite.Sprite):
         self.current_image = self.idle_frames_right[0]
         self.velocity_y,self.velocity_x = 0,0
         self.canJump = False
+        self.arvore = False
         
     def update(self,jump,tilerects): # Altera a posição, estado e animação do personagem
         self.velocity_x = 0
         self.canJump = False
+        self.arvore = False
         if self.L_Key:
             if self.SHIFT:
                 self.velocity_x = -self.speed * self.speed_mult
@@ -64,6 +66,7 @@ class Player(pygame.sprite.Sprite):
                     self.rect.bottom = pygame.Rect(tilerects[phisicsrect.collidelist(tilerects)]).top
                     self.velocity_y = 0
                     self.canJump = True
+                    self.arvore = True
                     
             if self.velocity_y < 0:
                     self.rect.top = tilerects[phisicsrect.collidelist(tilerects)][1]+32
@@ -75,7 +78,7 @@ class Player(pygame.sprite.Sprite):
         
         self.set_state()
         self.animate()
-        
+    
     def draw(self,screen,offset):
         screen.blit(self.current_image,(self.rect.x-offset[0],self.rect.y-offset[1]))
         
@@ -163,7 +166,18 @@ class Trash(pygame.sprite.Sprite):
     def draw(self,display:pygame.Surface,offset,):
         for i in self.rects:
             pygame.draw.rect(display,(255,0,45),(i[0]-offset[0],i[1]-offset[1],32,32))
-            
+
+class Arvores():
+    def __init__(self):
+        self.tree_list = []
+    def add_tree(self, x,y):
+        self.tree_list.append([x-x%32+18,y,0])
+        
+    def draw_trees (self,screen,offset):
+        for tree in self.tree_list:
+            pygame.draw.rect(screen,(0,255,0),(tree[0]-offset[0]+43,tree[1]-offset[1]+10,32*tree[2],64*tree[2]))
+            tree[2] = min(1,tree[2]+0.1)
+            print(tree[2])
         
 
 if __name__ == '__main__':

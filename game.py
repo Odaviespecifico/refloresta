@@ -1,6 +1,6 @@
 import pygame
 from menu import *
-from Entities import Player,Trash
+from Entities import Player,Trash,Arvores
 from utils import Background,TileMap
 
 class Game():
@@ -26,6 +26,7 @@ class Game():
         self.trash = Trash(self.map.toprectlist)
         self.pontuação = 0
         self.fullscreen = False
+        self.Arvores = Arvores()
         
     def game_loop(self):
         self.scroll = [0,0]
@@ -40,6 +41,11 @@ class Game():
             self.check_events()
             if self.START_KEY:
                 self.playing= False
+            
+            
+            if self.jogador.arvore and self.Q_Key:
+                self.Arvores.add_tree(self.jogador.rect.x,self.jogador.rect.y)
+                print(self.Arvores.tree_list)
             
             self.display.fill((45, 142, 193))
             
@@ -76,6 +82,7 @@ class Game():
             
             #Renderizar e coletar o lixo
             self.trash.draw(self.display,self.scroll)
+            self.Arvores.draw_trees(self.display,self.scroll)
             
             if self.jogador.Flip:
                 phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],60,70)
@@ -87,7 +94,6 @@ class Game():
                 if self.E_Key:
                     self.trash.rects.pop(phisicsrect.collidelist(self.trash.rects))
                     self.pontuação += 1
-                    print(f'Sua pontuação atual é: {self.pontuação}')
                     opacidade = min(60,opacidade + 3)
                     
             #Renderizar o jogador
@@ -119,6 +125,9 @@ class Game():
                         self.SPACE_KEY = True
                     case pygame.K_e:
                         self.E_Key = True
+                    case pygame.K_q:
+                        self.Q_Key = True
+                        
                     case pygame.K_RIGHT:
                         self.jogador.R_Key = True
                     case pygame.K_LEFT:
@@ -149,7 +158,7 @@ class Game():
                     
 
     def reset_keys(self):
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key = False, False, False, False, False, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key, self.Q_Key = False, False, False, False, False, False, False
 
     def draw_text(self, text, size, x, y ):
         font = pygame.font.Font(self.font_name,size)
