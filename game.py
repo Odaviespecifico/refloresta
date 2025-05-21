@@ -78,9 +78,9 @@ class Game():
             self.trash.draw(self.display,self.scroll)
             
             if self.jogador.Flip:
-                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],32,70)
+                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],60,70)
             else:
-                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],32,70)
+                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],60,70)
             if phisicsrect.collidelist(self.trash.rects) != -1:
                 colidedrect = self.trash.rects[phisicsrect.collidelist(self.trash.rects)]
                 pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32))

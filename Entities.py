@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
             if self.velocity_x < 0:
                 self.rect.left = pygame.Rect(tilerects[phisicsrect.collidelist(tilerects)]).right -50
                 
-        self.velocity_y += 0.7
+        self.velocity_y += 0.6
         self.rect.y += self.velocity_y
         
         if self.Flip:
