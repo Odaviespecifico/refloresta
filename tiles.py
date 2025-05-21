@@ -12,7 +12,7 @@ class TileMap():
         self.tiles.pop()
         self.putinasurface()
         self.gettilerects()
-        
+        self.gettoprects()
     #Ler CSV e tranformar em lista de listas
     #para cada item colocar um item na lista
     #Renderizar em uma superficie o mapa
@@ -48,7 +48,16 @@ class TileMap():
             x += 1
             y = 0
                 
-    
+    def gettoprects(self):
+        self.toprectlist = []
+        x,y = 0,0
+        for line in self.tilemap:
+            for column in line:
+                if column in ('0','1','2','3','12','13','14','15'):
+                    self.toprectlist.append((y*32,x*32,32,32))
+                y += 1
+            x += 1
+            y = 0
         
 if __name__ == '__main__':
     t = TileMap(r'assets\maps\map1.csv')

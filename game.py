@@ -1,6 +1,6 @@
 import pygame
 from menu import *
-from Entities import Player
+from Entities import Player,Trash
 from utils import Background
 from tiles import *
 
@@ -23,6 +23,7 @@ class Game():
         self.background = Background(5)
         self.jogador = Player()
         self.map = TileMap('assets\maps\map2.csv')
+        self.trash = Trash(self.map.toprectlist)
         
     def game_loop(self):
         self.scroll = [0,0]
@@ -31,7 +32,7 @@ class Game():
         while self.playing:
             
             self.clock.tick(60)
-            print(self.clock.get_fps())
+            # print(self.clock.get_fps()) #Mostrar FPS
             
             self.check_events()
             if self.START_KEY:
@@ -60,15 +61,33 @@ class Game():
                 self.display.blit(background,((-300)-self.scroll[0]*i/10,0))
                 i += 1
                 
+                
+            
             #Renderizar o tilemap
             self.display.blit(self.map.surface,(0-self.scroll[0],-self.scroll[1]))
             
+            #Atualizar o movimento do jogador
             self.jogador.update(self.SPACE_KEY,self.map.rectlist)
             
-            # for rect in self.map.rectlist:
-            #     pygame.draw.rect(self.display,(255,0,255),(rect[0]-self.scroll[0],rect[1]-self.scroll[1],32,32))
+            #Renderizar o lixo
+            self.trash.draw(self.display,self.scroll)
             
+            if self.jogador.Flip:
+                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],32,70)
+            else:
+                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],32,70)
+            if phisicsrect.collidelist(self.trash.rects) != -1:
+                print(f'colidiu com o indice {phisicsrect.collidelist(self.trash.rects)}')
+                colidedrect = self.trash.rects[phisicsrect.collidelist(self.trash.rects)]
+                pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32))
+                if self.E_Key:
+                    self.trash.rects.pop(phisicsrect.collidelist(self.trash.rects))
+                
+            print(self.trash.rects)
+            #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
+            
+            #atualizar a tela
             pygame.display.update()
             self.window.blit(self.display, (0,0))
             # print(self.jogador.L_Key,self.jogador.R_key)
@@ -96,6 +115,8 @@ class Game():
                         self.jogador.R_Key = True
                     case pygame.K_LEFT:
                         self.jogador.L_Key = True
+                    case pygame.K_e:
+                        self.E_Key = True
                         
             if event.type == pygame.KEYUP:
                 match event.key:
@@ -106,7 +127,7 @@ class Game():
                     
 
     def reset_keys(self):
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY = False, False, False, False, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key = False, False, False, False, False, False
 
     def draw_text(self, text, size, x, y ):
         font = pygame.font.Font(self.font_name,size)

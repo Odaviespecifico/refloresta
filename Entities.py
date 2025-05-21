@@ -1,5 +1,6 @@
-import pygame
+import pygame, random
 from utils import Spritesheet
+from tiles import TileMap
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -59,8 +60,6 @@ class Player(pygame.sprite.Sprite):
         
         
         
-        
-        
         self.set_state()
         self.animate()
         
@@ -111,3 +110,27 @@ class Player(pygame.sprite.Sprite):
             self.idle_frames_left.append(pygame.transform.flip(frame,True,False))
         
     
+class Trash(pygame.sprite.Sprite):
+    def __init__(self,tilemap):
+        self.tiles = tilemap
+        self.posições = set()
+        self.quantidade = random.randint(20,30)
+        self.rects = []
+        for i in range(self.quantidade):
+            posição = random.randint(0,len(tilemap))
+            self.posições.add(posição)    
+        for i in self.posições:
+            self.rects.append(pygame.Rect(self.tiles[i][0],self.tiles[i][1]-32,32,32))
+        
+    
+    def draw(self,display:pygame.Surface,offset,):
+        for i in self.rects:
+            pygame.draw.rect(display,(255,0,45),(i[0]-offset[0],i[1]-offset[1],32,32))
+            
+        
+
+if __name__ == '__main__':
+    pygame.init()
+    pygame.display.set_mode((300,300))
+    M = TileMap('assets\maps\map2.csv')
+    T = Trash(M.rectlist)
