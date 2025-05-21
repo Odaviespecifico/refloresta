@@ -18,9 +18,11 @@ class Player(pygame.sprite.Sprite):
         self.state = 'idle'
         self.current_image = self.idle_frames_right[0]
         self.velocity_y,self.velocity_x = 0,0
+        self.canJump = False
         
     def update(self,jump,tilerects): # Altera a posição, estado e animação do personagem
         self.velocity_x = 0
+        self.canJump = False
         if self.L_Key:
             if self.SHIFT:
                 self.velocity_x = -self.speed * self.speed_mult
@@ -35,8 +37,6 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.velocity_x = self.speed
             self.Flip = False
-        if jump:
-            self.velocity_y = -15 -abs(self.velocity_x/5)
             # self.rect.top -= 15
             
         self.rect.x += self.velocity_x
@@ -64,12 +64,15 @@ class Player(pygame.sprite.Sprite):
             if self.velocity_y > 0:
                     self.rect.bottom = pygame.Rect(tilerects[phisicsrect.collidelist(tilerects)]).top
                     self.velocity_y = 0
+                    self.canJump = True
                     
             if self.velocity_y < 0:
                     self.rect.top = tilerects[phisicsrect.collidelist(tilerects)][1]+32
                     self.velocity_y = 0
         
-        
+        if jump:
+            if self.canJump:
+                self.velocity_y = -15 -abs(self.velocity_x/5)
         
         self.set_state()
         self.animate()
