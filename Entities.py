@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
                 self.velocity_x = self.speed
             self.Flip = False
         if jump:
-            self.velocity_y = -15
+            self.velocity_y = -15 -abs(self.velocity_x/5)
             # self.rect.top -= 15
             
         self.rect.x += self.velocity_x
@@ -52,7 +52,7 @@ class Player(pygame.sprite.Sprite):
             if self.velocity_x < 0:
                 self.rect.left = pygame.Rect(tilerects[phisicsrect.collidelist(tilerects)]).right -50
                 
-        self.velocity_y += 0.5
+        self.velocity_y += 0.7
         self.rect.y += self.velocity_y
         
         if self.Flip:

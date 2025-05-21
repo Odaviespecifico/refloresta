@@ -88,7 +88,7 @@ class Game():
                     self.pontuação += 1
                     print(f'Sua pontuação atual é: {self.pontuação}')
                     opacidade = min(60,opacidade + 3)
-                
+                    
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
             
