@@ -23,6 +23,7 @@ class MainMenu(Menu):
         self.startx, self.starty = self.mid_w, self.mid_h + 30
         self.optionsx, self.optionsy = self.mid_w, self.mid_h + 50
         self.creditsx, self.creditsy = self.mid_w, self.mid_h + 70
+        self.tutorialx, self.tutorialy = self.mid_w, self.mid_h + 90
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
 
     def display_menu(self):
@@ -31,10 +32,11 @@ class MainMenu(Menu):
             self.game.check_events()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Main Menu', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
-            self.game.draw_text("Start Game", 20, self.startx, self.starty)
-            self.game.draw_text("Options", 20, self.optionsx, self.optionsy)
-            self.game.draw_text("Credits", 20, self.creditsx, self.creditsy)
+            self.game.draw_text('ReFloresta', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
+            self.game.draw_text("Começar jogo", 20, self.startx, self.starty)
+            self.game.draw_text("Opções", 20, self.optionsx, self.optionsy)
+            self.game.draw_text("Créditos", 20, self.creditsx, self.creditsy)
+            self.game.draw_text("Tutorial", 20, self.tutorialx, self.tutorialy)
             self.draw_cursor()
             self.blit_screen()
 
@@ -86,9 +88,9 @@ class OptionsMenu(Menu):
             self.game.check_events()
             self.check_input()
             self.game.display.fill((0, 0, 0))
-            self.game.draw_text('Options', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 30)
+            self.game.draw_text('Opções', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 30)
             self.game.draw_text("Volume", 15, self.volx, self.voly)
-            self.game.draw_text("Controls", 15, self.controlsx, self.controlsy)
+            self.game.draw_text("Controles", 15, self.controlsx, self.controlsy)
             self.draw_cursor()
             self.blit_screen()
 
@@ -119,7 +121,7 @@ class CreditsMenu(Menu):
                 self.game.curr_menu = self.game.main_menu
                 self.run_display = False
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Credits', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
+            self.game.draw_text('Créditos', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
             self.game.draw_text('Feito por Davi', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
             self.blit_screen()
             
