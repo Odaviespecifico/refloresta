@@ -103,7 +103,14 @@ class TileMap():
                 y += 1
             x += 1
             y = 0
-        
+            
+class musica:
+    def rodar_musica1():
+
+        pygame.mixer.init() # iniciar mixer
+        pygame.mixer.music.load("somteste.mp3") # diretório da música
+        pygame.mixer.music.play(-1) # play na música(em loop)        
+
 if __name__ == '__main__':
     t = TileMap(r'assets\maps\map1.csv')
     t.gettilerects()

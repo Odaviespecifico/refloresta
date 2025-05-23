@@ -17,6 +17,7 @@ class Game():
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.main_menu = MainMenu(self)
+        self.tutorial_screen = Tutorial(self)
         self.options = OptionsMenu(self)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
@@ -27,14 +28,38 @@ class Game():
         self.pontuação = 0
         self.fullscreen = False
         self.Arvores = Arvores()
-        
+        self.music_playing = False
+        pygame.mixer.init() #inicia música
+        pygame.mixer.music.load("somteste.mp3") #pega a música
+
     def game_loop(self):
         self.scroll = [0,0]
         yspeed = 0
         GRAVIDADE = 0.5
         opacidade = 0
+        self.tutorial = True
+        while self.tutorial:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        self.tutorial = False
+                        self.playing = True
+                        break
+            print('cabra')
+            self.tutorial_img = pygame.image.load("tutorial.png")
+            self.tutorial_img = pygame.transform.scale(self.tutorial_img,(self.DISPLAY_W, self.DISPLAY_H))
+            self.display.blit(self.tutorial_img,(0,0))
+            pygame.display.update()
+            self.window.blit(self.display, (0,0))
         while self.playing:
-            
+            if not self.music_playing:
+                #tratamento de erro(que humberto pediu, então já coloquei na música)
+                try:
+                    pygame.mixer.music.play(-1) #música em loop
+                    self.music_playing = True #coloca pra tocar a música
+                except pygame.error as erro:
+                    print(f"Erro ao produzir a música: {erro}")
+
             self.clock.tick(60)
             print(self.clock.get_fps()) #Mostrar FPS
             
@@ -94,7 +119,8 @@ class Game():
                     self.trash.rects.pop(phisicsrect.collidelist(self.trash.rects))
                     self.pontuação += 1
                     opacidade = min(60,opacidade + 3)
-                    
+
+            self.draw_text(f"Pontuação: {self.pontuação}", 20, 100, 30)        
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
             
