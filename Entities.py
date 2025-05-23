@@ -174,7 +174,7 @@ class Arvores():
         self.images = []
         for file in os.listdir(r'assets\Arvore\Growing Tree'):
             image = pygame.image.load(fr'assets\Arvore\Growing Tree\{file}').convert_alpha()
-            image = pygame.transform.scale_by(image,2)
+            image = pygame.transform.scale_by(image,1)
             self.images.append(image)
     def add_tree(self, x,y):
         try: 
@@ -187,7 +187,7 @@ class Arvores():
         
     def draw_trees (self,screen:pygame.Surface,offset):
         for tree in self.tree_list:
-            screen.blit(self.images[tree[2]],((tree[0]-offset[0]-152,tree[1]-offset[1]-155)))
+            screen.blit(self.images[tree[2]],((tree[0]-offset[0]-123,tree[1]-offset[1]-129)))
             tree[2] = min(len(self.images)-1,tree[2]+1)
         
 
