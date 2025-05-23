@@ -176,18 +176,18 @@ class Arvores():
             image = pygame.image.load(fr'assets\Arvore\Growing Tree\{file}').convert_alpha()
             image = pygame.transform.scale_by(image,1)
             self.images.append(image)
+
     def add_tree(self, x,y):
         try: 
             self.tree_dict[str((x-x%32+18,y))]
             print('Já tenho árvore aqui')
         except KeyError:
             self.tree_list.append([x-x%32+18,y,0])
-            self.tree_dict[str((x-x%32+18,y))] = 1
-            
-        
+            self.tree_dict[str((x-x%32+18,y))] = 1 
+
     def draw_trees (self,screen:pygame.Surface,offset):
         for tree in self.tree_list:
-            screen.blit(self.images[tree[2]],((tree[0]-offset[0]-123,tree[1]-offset[1]-129)))
+            screen.blit(self.images[tree[2]],(tree[0]-offset[0]-65,tree[1]-offset[1]-129))
             tree[2] = min(len(self.images)-1,tree[2]+1)
         
 
