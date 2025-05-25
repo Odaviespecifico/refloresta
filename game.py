@@ -27,6 +27,12 @@ class Game():
         self.pontuação = 0
         self.fullscreen = False
         self.Arvores = Arvores()
+        self.BLACK = (0, 0, 0)
+        self.WHITE = (255, 255, 255)
+        self.YELLOW = (255, 255, 0)
+        self.GREEN = (50, 205, 50)
+        self.HIGHLIGHT = (173, 255, 47)  # Verde limão
+        self.DARK_GRAY = (30, 30, 30)
         
     def game_loop(self):
         self.scroll = [0,0]
@@ -159,7 +165,7 @@ class Game():
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key, self.Q_Key = False, False, False, False, False, False, False
 
-    def draw_text(self, text, size, x, y ):
+    def draw_text(self, text, size, x, y,color):
         font = pygame.font.Font(self.font_name,size)
         text_surface = font.render(text, True, self.WHITE)
         text_rect = text_surface.get_rect()
