@@ -1,4 +1,4 @@
-import pygame, random,os
+import pygame, random, os
 from utils import Spritesheet, TileMap
 
 class Player(pygame.sprite.Sprite):
@@ -146,26 +146,36 @@ class Player(pygame.sprite.Sprite):
         for frame in self.walk_frames_right:
             self.walk_frames_left.append(pygame.transform.flip(frame,True,False))
         
-    
 class Trash(pygame.sprite.Sprite):
     def __init__(self,tilemap):
         self.tiles = tilemap
+        self.trash = list()
         self.posições = set()
         self.quantidade = random.randint(20,30)
         self.rects = []
+        self.trash_sprite = []
+        self.images = []
+
+        for file in os.listdir(r'assets\trash'):
+            image = pygame.image.load(fr'assets\trash\{file}').convert_alpha()
+            image = pygame.transform.scale_by(image, 2)
+            self.images.append(image)
+
         for i in range(self.quantidade):
             posição = random.randint(0,len(tilemap))
-            self.posições.add(posição)    
+            self.posições.add(posição)
+            
         for i in self.posições:
             try:
                 self.rects.append(pygame.Rect(self.tiles[i][0],self.tiles[i][1]-32,32,32))
-            except:
-                self.__init__
-        
+                self.trash_sprite.append(random.randint(0,len(self.images)-1))
+            except IndexError:               
+                continue
     
-    def draw(self,display:pygame.Surface,offset,):
-        for i in self.rects:
-            pygame.draw.rect(display,(255,0,45),(i[0]-offset[0],i[1]-offset[1],32,32))
+    def draw(self,display:pygame.Surface, offset):
+        for i, trash in enumerate(self.rects):
+            image = self.images[self.trash_sprite[i]]
+            display.blit(image, (trash.x - offset[0], trash.y - offset[1]))
 
 class Arvores():
     def __init__(self):
@@ -182,9 +192,7 @@ class Arvores():
             print('Já tenho árvore aqui')
         except KeyError:
             self.tree_list.append([x-x%32+18,y,0])
-            self.tree_dict[str((x-x%32+18,y))] = 1
-            
-        
+            self.tree_dict[str((x-x%32+18,y))] = 1    
     def draw_trees (self,screen:pygame.Surface,offset):
         for tree in self.tree_list:
             screen.blit(self.images[tree[2]],((tree[0]-offset[0]-152,tree[1]-offset[1]-155)))
