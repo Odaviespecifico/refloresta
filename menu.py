@@ -6,7 +6,9 @@ class Menu():
         self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
         self.run_display = True
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
-        self.offset = -120  # afastar mais o cursor para dar espaço
+        self.offset = -120
+        self.background = pygame.image.load("assets/background/Menu/Background_Refloresta.png")
+        self.background = pygame.transform.scale(self.background, (self.game.DISPLAY_W, self.game.DISPLAY_H))
 
     def draw_cursor(self):
         self.game.draw_text('►', 20, self.cursor_rect.x, self.cursor_rect.y, self.game.YELLOW)
@@ -30,14 +32,14 @@ class MainMenu(Menu):
         while self.run_display:
             self.game.check_events()
             self.check_input()
-            self.game.display.fill(self.game.DARK_GRAY)
+            self.game.display.blit(self.background, (0, 0))
 
-            self.game.draw_text('REFLORESTA', 40, self.mid_w, self.mid_h - 100, self.game.GREEN)
-            self.game.draw_text("Start Game", 30, self.startx, self.starty,
+            self.game.draw_text('REFLORESTA', 40, self.mid_w, self.mid_h - 100, self.game.HIGHLIGHT,)
+            self.game.draw_text("Iniciar", 20, self.startx, self.starty,
                                 self.game.HIGHLIGHT if self.state == "Start" else self.game.WHITE)
-            self.game.draw_text("Options", 30, self.optionsx, self.optionsy,
+            self.game.draw_text("Opções", 20, self.optionsx, self.optionsy,
                                 self.game.HIGHLIGHT if self.state == "Options" else self.game.WHITE)
-            self.game.draw_text("Credits", 30, self.creditsx, self.creditsy,
+            self.game.draw_text("Créditos", 20, self.creditsx, self.creditsy,
                                 self.game.HIGHLIGHT if self.state == "Credits" else self.game.WHITE)
 
             self.draw_cursor()
@@ -89,9 +91,9 @@ class OptionsMenu(Menu):
         while self.run_display:
             self.game.check_events()
             self.check_input()
-            self.game.display.fill(self.game.DARK_GRAY)
+            self.game.display.blit(self.background, (0, 0))
 
-            self.game.draw_text('Opções', 30, self.mid_w, self.mid_h - 60, self.game.GREEN)
+            self.game.draw_text('Opções', 30, self.mid_w, self.mid_h - 60, self.game.HIGHLIGHT)
             self.game.draw_text("Volume", 25, self.volx, self.voly,
                                 self.game.HIGHLIGHT if self.state == "Volume" else self.game.WHITE)
             self.game.draw_text("Controles", 25, self.controlsx, self.controlsy,
@@ -126,7 +128,7 @@ class CreditsMenu(Menu):
                 self.game.curr_menu = self.game.main_menu
                 self.run_display = False
 
-            self.game.display.fill(self.game.DARK_GRAY)
-            self.game.draw_text('Créditos', 30, self.mid_w, self.mid_h - 40, self.game.GREEN)
+            self.game.display.blit(self.background, (0, 0))
+            self.game.draw_text('Créditos', 30, self.mid_w, self.mid_h - 40, self.game.HIGHLIGHT)
             self.game.draw_text('Feito por Davi 🌿', 20, self.mid_w, self.mid_h + 10, self.game.WHITE)
             self.blit_screen()
