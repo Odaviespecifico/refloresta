@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.SHIFT = False
         self.load_frames()
         self.rect = pygame.Rect(32,0,32,70)
-        self.rect.y = 360 - 80
+        self.rect.y = 0
         self.current_frame = 0
         self.last_updated = 0 
         self.velocity = 0 
@@ -167,7 +167,7 @@ class Trash(pygame.sprite.Sprite):
             
         for i in self.posições:
             try:
-                self.rects.append(pygame.Rect(self.tiles[i][0],self.tiles[i][1]-32,32,32))
+                self.rects.append(pygame.Rect(self.tiles[i][0],self.tiles[i][1]-31,32,32))
                 self.trash_sprite.append(random.randint(0,len(self.images)-1))
             except IndexError:               
                 continue
