@@ -179,13 +179,28 @@ class Arvores():
             image = pygame.transform.scale_by(image,1)
             self.images.append(image)
 
-    def add_tree(self, x,y):
-        try: 
-            self.tree_dict[str((x-x%32+18,y))]
+    def add_tree(self, x, y, tilerects):
+        # Ajuste o x para alinhar na grade de 32 (mais o offset que já usa)
+        tile_x = x - x % 32 + 18
+        tile_y = y
+
+        # Criar retângulo da árvore (largura e altura aproximadas da árvore)
+        tree_rect = pygame.Rect(tile_x, tile_y, 32, 70)  # pode ajustar tamanho se precisar
+
+        # Verifica se já tem árvore ali
+        if str((tile_x, tile_y)) in self.tree_dict:
             print('Já tenho árvore aqui')
-        except KeyError:
-            self.tree_list.append([x-x%32+18,y,0])
-            self.tree_dict[str((x-x%32+18,y))] = 1 
+            return
+
+        # Verifica se a base da árvore está sobre um tile sólido (colisão)
+        base_rect = pygame.Rect(tile_x, tile_y + 70, 32, 10)  # retângulo logo abaixo da base
+        if base_rect.collidelist(tilerects) == -1:
+            print('Sem chão para plantar a árvore')
+            return
+
+        # Se passou nas verificações, adiciona a árvore
+        self.tree_list.append([tile_x, tile_y, 0])
+        self.tree_dict[str((tile_x, tile_y))] = 1
 
     def draw_trees(self, screen: pygame.Surface, offset):
         self.frame_counter += 1

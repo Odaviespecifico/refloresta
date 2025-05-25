@@ -49,7 +49,7 @@ class Game():
             
             
             if self.jogador.arvore and self.Q_Key:
-                self.Arvores.add_tree(self.jogador.rect.x,self.jogador.rect.y)
+                self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
             
             self.display.fill((45, 142, 193))
             
