@@ -23,7 +23,7 @@ class Game():
         self.curr_menu = self.main_menu
         self.background = Background(5)
         self.jogador = Player()
-        self.map = TileMap('assets\maps\map2.csv')
+        self.map = TileMap('assets\maps\map_test.csv')
         self.trash = Trash(self.map.toprectlist)
         self.pontuação = 0
         self.fullscreen = False

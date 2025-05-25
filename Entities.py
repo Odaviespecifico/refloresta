@@ -7,8 +7,9 @@ class Player(pygame.sprite.Sprite):
         self.L_Key,self.R_Key,self.Flip = False,False,False
         self.SHIFT = False
         self.load_frames()
-        self.rect = pygame.Rect(32,0,32,70)
-        self.rect.y = 360 - 80
+        self.rect = pygame.Rect(0,0,32,70)
+        self.rect.y = -10
+        self.rect.x = -40
         self.current_frame = 0
         self.last_updated = 0 
         self.velocity = 0 
