@@ -34,13 +34,13 @@ class MainMenu(Menu):
             self.check_input()
             self.game.display.blit(self.background, (0, 0))
 
-            self.game.draw_text('REFLORESTA', 40, self.mid_w, self.mid_h - 100, self.game.HIGHLIGHT,)
-            self.game.draw_text("Iniciar", 20, self.startx, self.starty,
-                                self.game.HIGHLIGHT if self.state == "Start" else self.game.WHITE)
-            self.game.draw_text("Opções", 20, self.optionsx, self.optionsy,
-                                self.game.HIGHLIGHT if self.state == "Options" else self.game.WHITE)
-            self.game.draw_text("Créditos", 20, self.creditsx, self.creditsy,
-                                self.game.HIGHLIGHT if self.state == "Credits" else self.game.WHITE)
+            self.game.draw_text('REFLORESTA', 40, self.mid_w, self.mid_h - 100, self.game.HIGHLIGHT, border=True)
+            self.game.draw_text("Iniciar", 22, self.startx, self.starty,
+                                self.game.HIGHLIGHT if self.state == "Start" else self.game.WHITE, border=True)
+            self.game.draw_text("Opções", 22, self.optionsx, self.optionsy,
+                                self.game.HIGHLIGHT if self.state == "Options" else self.game.WHITE, border=True)
+            self.game.draw_text("Créditos", 22, self.creditsx, self.creditsy,
+                                self.game.HIGHLIGHT if self.state == "Credits" else self.game.WHITE, border=True)
 
             self.draw_cursor()
             self.blit_screen()
@@ -93,11 +93,11 @@ class OptionsMenu(Menu):
             self.check_input()
             self.game.display.blit(self.background, (0, 0))
 
-            self.game.draw_text('Opções', 30, self.mid_w, self.mid_h - 60, self.game.HIGHLIGHT)
-            self.game.draw_text("Volume", 25, self.volx, self.voly,
-                                self.game.HIGHLIGHT if self.state == "Volume" else self.game.WHITE)
-            self.game.draw_text("Controles", 25, self.controlsx, self.controlsy,
-                                self.game.HIGHLIGHT if self.state == "Controls" else self.game.WHITE)
+            self.game.draw_text('Opções', 30, self.mid_w, self.mid_h - 60, self.game.HIGHLIGHT, border=True)
+            self.game.draw_text("Volume", 22, self.volx, self.voly,
+                                self.game.HIGHLIGHT if self.state == "Volume" else self.game.WHITE, border=True)
+            self.game.draw_text("Controles", 22, self.controlsx, self.controlsy,
+                                self.game.HIGHLIGHT if self.state == "Controls" else self.game.WHITE, border=True)
 
             self.draw_cursor()
             self.blit_screen()
@@ -129,6 +129,6 @@ class CreditsMenu(Menu):
                 self.run_display = False
 
             self.game.display.blit(self.background, (0, 0))
-            self.game.draw_text('Créditos', 30, self.mid_w, self.mid_h - 40, self.game.HIGHLIGHT)
-            self.game.draw_text('Feito por Davi 🌿', 20, self.mid_w, self.mid_h + 10, self.game.WHITE)
+            self.game.draw_text('Créditos', 30, self.mid_w, self.mid_h - 40, self.game.HIGHLIGHT, border=True)
+            self.game.draw_text('Feito por Davi 🌿', 20, self.mid_w, self.mid_h + 10, self.game.WHITE, border=True)
             self.blit_screen()

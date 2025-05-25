@@ -164,14 +164,27 @@ class Game():
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key, self.Q_Key = False, False, False, False, False, False, False
 
-    def draw_text(self, text, size, x, y, color=None):
+    def draw_text(self, text, size, x, y, color=None, border=False, border_color=(0, 0, 0)):
         if color is None:
             color = self.WHITE
         font_path = "assets/fonts/PressStart2P-Regular.ttf"
         font = pygame.font.Font(font_path, size)
+
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.center = (x, y)
+
+        if border:
+            # Desenha o texto ao redor da posição original para formar a borda
+            for dx in [-3, 0, 3]:
+                for dy in [-3, 0, 3]:
+                    if dx != 0 or dy != 0:
+                        border_surf = font.render(text, True, border_color)
+                        border_rect = border_surf.get_rect()
+                        border_rect.center = (x + dx, y + dy)
+                        self.display.blit(border_surf, border_rect)
+
+        # Desenha o texto principal por cima
         self.display.blit(text_surface, text_rect)
         
 
