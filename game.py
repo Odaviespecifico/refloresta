@@ -1,7 +1,7 @@
 import pygame
 from menu import *
-from Entities import Player,Trash,Arvores
-from utils import Background,TileMap
+from Entities import Player, Trash, Arvores
+from utils import Background, TileMap
 
 class Game():
     def __init__(self):
@@ -24,6 +24,7 @@ class Game():
         self.jogador = Player()
         self.map = TileMap('assets\maps\map2.csv')
         self.trash = Trash(self.map.toprectlist)
+        ######### mentions Trash check later ccelesti
         self.pontuação = 0
         self.fullscreen = False
         self.Arvores = Arvores()
@@ -36,7 +37,7 @@ class Game():
         while self.playing:
             
             self.clock.tick(60)
-            print(self.clock.get_fps()) #Mostrar FPS
+            # print(self.clock.get_fps()) #Mostrar FPS
             
             self.check_events()
             if self.START_KEY:
@@ -82,17 +83,22 @@ class Game():
             #Renderizar e coletar o lixo
             self.trash.draw(self.display,self.scroll)
             self.Arvores.draw_trees(self.display,self.scroll)
+            ######### mentions Trash check later ccelesti
             
             if self.jogador.Flip:
-                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],60,70)
+                phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],60,70) ####### what is the difference bt line 89 and 91?
             else:
                 phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],60,70)
             if phisicsrect.collidelist(self.trash.rects) != -1:
                 colidedrect = self.trash.rects[phisicsrect.collidelist(self.trash.rects)]
-                pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32))
+                # pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32)) #####when colision true, it changes colour from red to blue
                 if self.E_Key:
-                    self.trash.rects.pop(phisicsrect.collidelist(self.trash.rects))
+                    print(f'Antes: {self.trash.rects = } e {self.trash.trash_sprite = }')
+                    colideindex = phisicsrect.collidelist(self.trash.rects)
+                    self.trash.rects.pop(colideindex)
+                    self.trash.trash_sprite.pop(colideindex)
                     self.pontuação += 1
+                    print(f'Depois: {self.trash.rects = } e {self.trash.trash_sprite = }')
                     opacidade = min(60,opacidade + 3)
                     
             #Renderizar o jogador

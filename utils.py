@@ -1,5 +1,5 @@
 # Spritesheet
-import pygame,os
+import pygame, csv, os
 
 class Spritesheet:
     def __init__(self, filename,width=128,height=70):
@@ -42,8 +42,6 @@ class Background:
         
         # modifica a escala para preencher a tela do jogo
         self.rect = self.images[0].get_rect()
-            
-import pygame, csv, os
         
 class TileMap():
     def __init__(self,map):
