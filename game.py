@@ -38,6 +38,7 @@ class Game():
         GRAVIDADE = 0.5
         opacidade = 0
         self.tutorial = True
+        pontuação_maxima = len(self.trash.rects)
         while self.tutorial:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -128,6 +129,18 @@ class Game():
             self.draw_text(f"Pontuação: {self.pontuação}", 20, 100, 30)        
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
+            
+            #####Barra de pontuação
+            #Mudança de cor
+            incremento = 255/pontuação_maxima
+            if self.pontuação > pontuação_maxima/2:
+                cor_pontuação = [min(255,255-(incremento*self.pontuação)*1.2+150),min(255,incremento*self.pontuação*2),0]
+            else:
+                cor_pontuação = [255,incremento*self.pontuação,0]
+            
+            #Desenhar a barra
+            pygame.draw.rect(self.display,(cor_pontuação),(20,50,self.pontuação*10,20))
+            pygame.draw.rect(self.display,(30,30,30),(20,50,pontuação_maxima*10,20),width=2)
             
             #atualizar a tela
             pygame.display.update()
