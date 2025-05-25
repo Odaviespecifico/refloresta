@@ -24,7 +24,6 @@ class Game():
         self.jogador = Player()
         self.map = TileMap('assets\maps\map2.csv')
         self.trash = Trash(self.map.toprectlist)
-        ######### mentions Trash check later ccelesti
         self.pontuação = 0
         self.fullscreen = False
         self.Arvores = Arvores()
