@@ -152,7 +152,7 @@ class Trash(pygame.sprite.Sprite):
         self.tiles = tilemap
         self.trash = list()
         self.posições = set()
-        self.quantidade = random.randint(20,30)
+        self.quantidade = 30
         self.rects = []
         self.trash_sprite = []
         self.images = []
@@ -167,11 +167,10 @@ class Trash(pygame.sprite.Sprite):
             self.posições.add(posição)
             
         for i in self.posições:
-            try:
-                self.rects.append(pygame.Rect(self.tiles[i][0],self.tiles[i][1]-32,32,32))
-                self.trash_sprite.append(random.randint(0,len(self.images)-1))
-            except IndexError:               
-                continue
+            print(self.posições)
+            print(i)
+            self.rects.append(pygame.Rect(self.tiles[i-1][0],self.tiles[i-1][1]-32,32,32))
+            self.trash_sprite.append(random.randint(0,len(self.images)-1))
     
     def draw(self,display:pygame.Surface, offset):
         for i, trash in enumerate(self.rects):
