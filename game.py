@@ -1,5 +1,5 @@
 import pygame
-from menu import *
+from menu import tela_inicial
 from Entities import Player,Trash,Arvores
 from utils import Background,TileMap
 
@@ -7,7 +7,8 @@ class Game():
     def __init__(self):
         pygame.init()
         self.running, self.playing = True, False
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+        self.UP_KEY = self.DOWN_KEY = self.START_KEY = self.BACK_KEY = False
+        self.SPACE_KEY = self.E_Key = self.Q_Key = False
         scale = 60
         self.DISPLAY_W, self.DISPLAY_H = 16*scale, 9*scale
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
@@ -16,10 +17,11 @@ class Game():
         # self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)),flags=pygame.FULLSCREEN|pygame.SCALED)
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
-        self.main_menu = MainMenu(self)
-        self.options = OptionsMenu(self)
-        self.credits = CreditsMenu(self)
-        self.curr_menu = self.main_menu
+        self.curr_menu = None
+        #self.main_menu = MainMenu(self)
+        #self.options = OptionsMenu(self)
+        #self.credits = CreditsMenu(self)
+        #self.curr_menu = self.main_menu
         self.background = Background(5)
         self.jogador = Player()
         self.map = TileMap('assets\maps\map2.csv')
@@ -27,12 +29,7 @@ class Game():
         self.pontuação = 0
         self.fullscreen = False
         self.Arvores = Arvores()
-        self.BLACK = (0, 0, 0)
-        self.WHITE = (10, 10, 175)
-        self.YELLOW = (255, 255, 0)
-        self.HIGHLIGHT = (173, 255, 75)  # Verde limão
-        self.BROWN = (139, 69, 19)
-        
+
     def game_loop(self):
         self.scroll = [0,0]
         yspeed = 0
@@ -186,8 +183,10 @@ class Game():
 
         # Desenha o texto principal por cima
         self.display.blit(text_surface, text_rect)
-        
 
-
-
-
+if __name__ == '__main__':
+    from menu import tela_inicial  # Garante que o menu esteja importado
+    tela_inicial()  # Mostra o menu
+    jogo = Game()
+    jogo.playing = True
+    jogo.game_loop()

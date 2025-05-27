@@ -1,134 +1,83 @@
 import pygame
+import sys
 
-class Menu():
-    def __init__(self, game):
-        self.game = game
-        self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
-        self.run_display = True
-        self.cursor_rect = pygame.Rect(0, 0, 20, 20)
-        self.offset = -120
-        self.background = pygame.image.load("assets/background/Menu/Background_Refloresta.png")
-        self.background = pygame.transform.scale(self.background, (self.game.DISPLAY_W, self.game.DISPLAY_H))
+pygame.init()
 
-    def draw_cursor(self):
-        self.game.draw_text('►', 20, self.cursor_rect.x, self.cursor_rect.y, self.game.YELLOW)
+# Dimensões da tela
+LARGURA, ALTURA = 960, 540
+TELA = pygame.display.set_mode((LARGURA, ALTURA))
+pygame.display.set_caption("Refloresta")
 
-    def blit_screen(self):
-        self.game.window.blit(self.game.display, (0, 0))
-        pygame.display.update()
-        self.game.reset_keys()
+# Cores
+BRANCO = (255, 255, 255)
+PRETO = (0, 0, 0)
+VERDE = (100, 200, 20)
+VERDE_ESCURO = (0, 150, 0)
+VERMELHO = (200, 0, 0)
+VERMELHO_ESCURO = (150, 0, 0)
+BROWN = (139, 69, 19)
+BROWN_ESCURO = (101, 67, 33) 
 
-class MainMenu(Menu):
-    def __init__(self, game):
-        Menu.__init__(self, game)
-        self.state = "Start"
-        self.startx, self.starty = self.mid_w, self.mid_h + 30
-        self.optionsx, self.optionsy = self.mid_w, self.mid_h + 70
-        self.creditsx, self.creditsy = self.mid_w, self.mid_h + 110
-        self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
+# Fontes
+fonte_grande = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 36)
+fonte_pequena = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
 
-    def display_menu(self):
-        self.run_display = True
-        while self.run_display:
-            self.game.check_events()
-            self.check_input()
-            self.game.display.blit(self.background, (0, 0))
+# Imagem de fundo
+imagem_fundo = pygame.image.load("assets/background/Menu/Background_Refloresta.png")
+imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA, ALTURA))  # Ajusta para o tamanho da tela
 
-            self.game.draw_text('REFLORESTA', 40, self.mid_w, self.mid_h - 100, self.game.HIGHLIGHT, border=True)
-            self.game.draw_text("Iniciar", 22, self.startx, self.starty,
-                                self.game.HIGHLIGHT if self.state == "Start" else self.game.WHITE, border=True)
-            self.game.draw_text("Opções", 22, self.optionsx, self.optionsy,
-                                self.game.HIGHLIGHT if self.state == "Options" else self.game.WHITE, border=True)
-            self.game.draw_text("Créditos", 22, self.creditsx, self.creditsy,
-                                self.game.HIGHLIGHT if self.state == "Credits" else self.game.WHITE, border=True)
+class Botao:
+    def __init__(self, x, y, largura, altura, texto, cor, cor_hover): 
+        self.rect = pygame.Rect(x, y, largura, altura)
+        self.texto = texto
+        self.cor = cor
+        self.cor_hover = cor_hover
+        self.cor_atual = cor
+        
+    def desenhar(self, superficie):
+        pygame.draw.rect(superficie, self.cor_atual, self.rect)
+        pygame.draw.rect(superficie, PRETO, self.rect, 2)
+        texto_surf = fonte_pequena.render(self.texto, True, PRETO)
+        texto_rect = texto_surf.get_rect(center=self.rect.center)
+        superficie.blit(texto_surf, texto_rect)
+        
+    def verificar_clique(self, pos):
+        return self.rect.collidepoint(pos)
+    
+    def verificar_hover(self, pos):
+        self.cor_atual = self.cor_hover if self.rect.collidepoint(pos) else self.cor
 
-            self.draw_cursor()
-            self.blit_screen()
+def tela_inicial():
+    botao_iniciar = Botao(LARGURA//2 - 100, ALTURA//2, 200, 50, "Iniciar", VERDE, VERDE_ESCURO)
+    botao_sair = Botao(LARGURA//2 - 100, ALTURA//2 + 70, 200, 50, "Sair", VERMELHO, VERMELHO_ESCURO)
+    
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if evento.type == pygame.MOUSEBUTTONDOWN:
+                if botao_iniciar.verificar_clique(evento.pos):
+                    return
+                if botao_sair.verificar_clique(evento.pos):
+                    pygame.quit()
+                    sys.exit()
+        
+        mouse_pos = pygame.mouse.get_pos()
+        botao_iniciar.verificar_hover(mouse_pos)
+        botao_sair.verificar_hover(mouse_pos)
 
-    def move_cursor(self):
-        if self.game.DOWN_KEY:
-            if self.state == 'Start':
-                self.cursor_rect.midtop = (self.optionsx + self.offset, self.optionsy)
-                self.state = 'Options'
-            elif self.state == 'Options':
-                self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
-                self.state = 'Credits'
-            elif self.state == 'Credits':
-                self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
-                self.state = 'Start'
-        elif self.game.UP_KEY:
-            if self.state == 'Start':
-                self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
-                self.state = 'Credits'
-            elif self.state == 'Options':
-                self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
-                self.state = 'Start'
-            elif self.state == 'Credits':
-                self.cursor_rect.midtop = (self.optionsx + self.offset, self.optionsy)
-                self.state = 'Options'
+        # Fundo com imagem
+        TELA.blit(imagem_fundo, (0, 0))
+        
+        # Título
+        titulo = fonte_grande.render("REFLORESTA", True, BRANCO)
+        titulo_rect = titulo.get_rect(center=(LARGURA//2, ALTURA//3))
+        TELA.blit(titulo, titulo_rect)
 
-    def check_input(self):
-        self.move_cursor()
-        if self.game.START_KEY:
-            if self.state == 'Start':
-                self.game.playing = True
-            elif self.state == 'Options':
-                self.game.curr_menu = self.game.options
-            elif self.state == 'Credits':
-                self.game.curr_menu = self.game.credits
-            self.run_display = False
-
-class OptionsMenu(Menu):
-    def __init__(self, game):
-        Menu.__init__(self, game)
-        self.state = 'Volume'
-        self.volx, self.voly = self.mid_w, self.mid_h + 20
-        self.controlsx, self.controlsy = self.mid_w, self.mid_h + 60
-        self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
-
-    def display_menu(self):
-        self.run_display = True
-        while self.run_display:
-            self.game.check_events()
-            self.check_input()
-            self.game.display.blit(self.background, (0, 0))
-
-            self.game.draw_text('Opções', 30, self.mid_w, self.mid_h - 60, self.game.HIGHLIGHT, border=True)
-            self.game.draw_text("Volume", 22, self.volx, self.voly,
-                                self.game.HIGHLIGHT if self.state == "Volume" else self.game.WHITE, border=True)
-            self.game.draw_text("Controles", 22, self.controlsx, self.controlsy,
-                                self.game.HIGHLIGHT if self.state == "Controls" else self.game.WHITE, border=True)
-
-            self.draw_cursor()
-            self.blit_screen()
-
-    def check_input(self):
-        if self.game.BACK_KEY:
-            self.game.curr_menu = self.game.main_menu
-            self.run_display = False
-        elif self.game.UP_KEY or self.game.DOWN_KEY:
-            if self.state == 'Volume':
-                self.state = 'Controls'
-                self.cursor_rect.midtop = (self.controlsx + self.offset, self.controlsy)
-            elif self.state == 'Controls':
-                self.state = 'Volume'
-                self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
-        elif self.game.START_KEY:
-            pass  # TO-DO: Adicionar menus de volume e controles
-
-class CreditsMenu(Menu):
-    def __init__(self, game):
-        Menu.__init__(self, game)
-
-    def display_menu(self):
-        self.run_display = True
-        while self.run_display:
-            self.game.check_events()
-            if self.game.START_KEY or self.game.BACK_KEY:
-                self.game.curr_menu = self.game.main_menu
-                self.run_display = False
-
-            self.game.display.blit(self.background, (0, 0))
-            self.game.draw_text('Créditos', 30, self.mid_w, self.mid_h - 40, self.game.HIGHLIGHT, border=True)
-            self.game.draw_text('Feito por Davi 🌿', 20, self.mid_w, self.mid_h + 10, self.game.WHITE, border=True)
-            self.blit_screen()
+        # Botões
+        botao_iniciar.desenhar(TELA)
+        botao_sair.desenhar(TELA)
+        
+        pygame.display.flip()
+        pygame.time.Clock().tick(60)
