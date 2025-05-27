@@ -110,7 +110,6 @@ class Game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
-                self.curr_menu.run_display = False
                 
             if event.type == pygame.KEYDOWN:
                 match event.key:
@@ -185,8 +184,8 @@ class Game():
         self.display.blit(text_surface, text_rect)
 
 if __name__ == '__main__':
-    from menu import tela_inicial  # Garante que o menu esteja importado
-    tela_inicial()  # Mostra o menu
+    from menu import tela_inicial
+    tela_inicial()
     jogo = Game()
     jogo.playing = True
     jogo.game_loop()
