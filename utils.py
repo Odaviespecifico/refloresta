@@ -27,6 +27,7 @@ class Background:
         self.images = []
         files = (file for file in os.listdir(r'assets\background') if os.path.isfile(os.path.join(r'assets\background', file)))
         for file in files:
+            print(file)
             path = R'assets\background' + R"\\"
             imagem = pygame.image.load(path + file).convert_alpha()
             superficie = pygame.Surface((imagem.get_width()*copias,imagem.get_height()))#Cria uma superficie para copiar a imagem várias vezes
@@ -36,7 +37,7 @@ class Background:
             superficie.set_colorkey((0,0,0))
             self.images.append(superficie)
         for index in range(len(self.images)):
-            self.images[index] = pygame.transform.scale_by(self.images[index],2)
+            self.images[index] = pygame.transform.scale_by(self.images[index],0.3)
         
         print(self.images)
         
