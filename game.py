@@ -66,9 +66,12 @@ class Game():
             # print(self.clock.get_fps()) #Mostrar FPS
             
             self.check_events()
-            if self.START_KEY:
-                self.playing= False
-            
+            if self.START_KEY: #Teste de mudar de fase
+                # self.playing= False
+                self.map = TileMap('assets\maps\map1.csv')
+                self.trash = Trash(self.map.toprectlist)
+                self.jogador = Player()
+                self.pontuação = 0
             
             if self.jogador.arvore and self.Q_Key:
                 self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
