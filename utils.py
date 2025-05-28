@@ -1,5 +1,5 @@
 # Spritesheet
-import pygame,os
+import pygame, csv, os
 
 class Spritesheet:
     def __init__(self, filename,width=128,height=70):
@@ -42,8 +42,6 @@ class Background:
         
         # modifica a escala para preencher a tela do jogo
         self.rect = self.images[0].get_rect()
-            
-import pygame, csv, os
         
 class TileMap():
     def __init__(self,map):
@@ -73,8 +71,12 @@ class TileMap():
         x,y,c = 0,0,0
         for line in self.tilemap:
             for column in line:
+                print(column)
                 if column != '-1':
-                    self.surface.blit(self.tiles[int(column)],(y*32,x*32))
+                    if column == '25':
+                        self.surface.blit(self.tiles[-1],(y*32,x*32))
+                    else:
+                        self.surface.blit(self.tiles[int(column)],(y*32,x*32))
                     c += 1
                 y += 1
             x += 1
@@ -84,10 +86,11 @@ class TileMap():
             
     def gettilerects(self):
         self.rectlist = []
+        noncolide_rects = {'4','14','15','11','-1'}
         x,y = 0,0
         for line in self.tilemap:
             for column in line:
-                if column != '-1':
+                if column not in noncolide_rects:
                     self.rectlist.append((y*32,x*32,32,32))
                 y += 1
             x += 1
@@ -95,15 +98,23 @@ class TileMap():
                 
     def gettoprects(self):
         self.toprectlist = []
+        grass_rects = ['1','2','0','13','18','20','21','22','23','24','25'] #Onde o lixo pode spawnar
         x,y = 0,0
         for line in self.tilemap:
             for column in line:
-                if column in ('0','1','2','3','12','13','14','15'):
+                if column in grass_rects:
                     self.toprectlist.append((y*32,x*32,32,32))
                 y += 1
             x += 1
             y = 0
-        
+            
+class musica:
+    def rodar_musica1():
+
+        pygame.mixer.init() # iniciar mixer
+        pygame.mixer.music.load("somteste.mp3") # diretório da música
+        pygame.mixer.music.play(-1) # play na música(em loop)        
+
 if __name__ == '__main__':
     t = TileMap(r'assets\maps\map1.csv')
     t.gettilerects()
