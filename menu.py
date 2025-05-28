@@ -62,7 +62,19 @@ class Botao:
 #     else:
 #         self.tela.fill(VERMELHO["AZUL"])
         
+def desenhar_texto_com_borda(texto, fonte, cor_texto, cor_borda, x, y, superficie):
+    texto_base = fonte.render(texto, True, cor_texto)
+    texto_borda = fonte.render(texto, True, cor_borda)
+    texto_rect = texto_base.get_rect(center=(x, y))
 
+    # Desenha a borda em 8 direções ao redor do texto
+    for dx in [-3, 0, 3]:
+        for dy in [-3, 0, 3]:
+            if dx != 0 or dy != 0:
+                superficie.blit(texto_borda, texto_rect.move(dx, dy))
+
+    superficie.blit(texto_base, texto_rect)
+    
 def creditos():
     rodando = True
 
@@ -89,9 +101,9 @@ def creditos():
         TELA.blit(fundo_creditos, (0, 0))
         TELA.blit(rect_fundo, (LARGURA - 830, 120))
 
-        titulo = fonte_grande.render("AGRADECIMENTOS", True, BRANCO)
-        titulo_rect = titulo.get_rect(center=(LARGURA//2, 100 - 30))
-        TELA.blit(titulo, titulo_rect)
+        desenhar_texto_com_borda("AGRADECIMENTOS", fonte_grande, BRANCO, PRETO, LARGURA//2, 100 - 30, TELA)
+        #titulo_rect = titulo.get_rect(center=(LARGURA//2, 100 - 30))
+        #TELA.blit(titulo, titulo_rect)
 
         creditos_texto = [
                 "",
@@ -146,10 +158,10 @@ def tela_inicial():
         TELA.blit(imagem_fundo, (0, 0))
         
         # Título
-        titulo = fonte_grande.render("REFLORESTA", True, BRANCO)
-        titulo_rect = titulo.get_rect(center=(LARGURA//2, ALTURA//3))
-        TELA.blit(titulo, titulo_rect)
-        #game.draw_text("REFLORESTA", 40, LARGURA // 2, ALTURA // 3, BRANCO, TELA, border=True, border_color=PRETO)
+        #titulo = fonte_grande.render("REFLORESTA", True, BRANCO)
+        #titulo_rect = titulo.get_rect(center=(LARGURA//2, ALTURA//3))
+        #TELA.blit(titulo, titulo_rect)
+        desenhar_texto_com_borda("REFLORESTA", fonte_grande, BRANCO, PRETO, LARGURA//2, ALTURA//3, TELA)
 
         # Botões
         botao_iniciar.desenhar(TELA)
