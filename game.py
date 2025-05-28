@@ -7,20 +7,21 @@ class Game():
     def __init__(self):
         pygame.init()
         self.running, self.playing = True, False
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+        self.UP_KEY = self.DOWN_KEY = self.START_KEY = self.BACK_KEY = False
+        self.SPACE_KEY = self.E_Key = self.Q_Key = False
         scale = 60
         self.DISPLAY_W, self.DISPLAY_H = 16*scale, 9*scale
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.clock = pygame.time.Clock()
-        self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)),flags=pygame.SCALED)
+        self.window = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
         # self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)),flags=pygame.FULLSCREEN|pygame.SCALED)
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
-        self.main_menu = MainMenu(self)
-        self.tutorial_screen = Tutorial(self)
-        self.options = OptionsMenu(self)
-        self.credits = CreditsMenu(self)
-        self.curr_menu = self.main_menu
+        self.curr_menu = None
+        #self.main_menu = MainMenu(self)
+        #self.options = OptionsMenu(self)
+        #self.credits = CreditsMenu(self)
+        #self.curr_menu = self.main_menu
         self.background = Background(5)
         self.jogador = Player()
         self.map = TileMap('assets\maps\map_test.csv')
@@ -70,7 +71,7 @@ class Game():
             
             
             if self.jogador.arvore and self.Q_Key:
-                self.Arvores.add_tree(self.jogador.rect.x,self.jogador.rect.y)
+                self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
             
             self.display.fill((45, 142, 193))
             
@@ -152,7 +153,6 @@ class Game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
-                self.curr_menu.run_display = False
                 
             if event.type == pygame.KEYDOWN:
                 match event.key:
@@ -203,13 +203,32 @@ class Game():
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key, self.Q_Key = False, False, False, False, False, False, False
 
-    def draw_text(self, text, size, x, y ):
-        font = pygame.font.Font(self.font_name,size)
-        text_surface = font.render(text, True, self.WHITE)
-        text_rect = text_surface.get_rect()
-        text_rect.center = (x,y)
-        self.display.blit(text_surface,text_rect)
+    def draw_text(self, text, size, x, y, color=None, border=False, border_color=(0, 0, 0)):
+        if color is None:
+            #color = self.WHITE
+         font_path = "assets/fonts/PressStart2P-Regular.ttf"
+         font = pygame.font.Font(font_path, size)
 
+         text_surface = font.render(text, True, color)
+         text_rect = text_surface.get_rect()
+         text_rect.center = (x, y)
 
+        if border:
+            # Desenha o texto ao redor da posição original para formar a borda
+            for dx in [-3, 0, 3]:
+                for dy in [-3, 0, 3]:
+                    if dx != 0 or dy != 0:
+                        border_surf = font.render(text, True, border_color)
+                        border_rect = border_surf.get_rect()
+                        border_rect.center = (x + dx, y + dy)
+                        self.display.blit(border_surf, border_rect)
 
+        # Desenha o texto principal por cima
+        self.display.blit(text_surface, text_rect)
 
+if __name__ == '__main__':
+    from menu import tela_inicial
+    tela_inicial()
+    jogo = Game()
+    jogo.playing = True
+    jogo.game_loop()

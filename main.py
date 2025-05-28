@@ -1,7 +1,9 @@
 from game import Game
+from menu import tela_inicial
 
-g = Game()
 
-while g.running:
-    g.curr_menu.display_menu()
+if __name__ == '__main__':
+    tela_inicial()
+    g = Game()
+    g.playing = True
     g.game_loop()
