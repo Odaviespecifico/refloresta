@@ -205,13 +205,13 @@ class Game():
 
     def draw_text(self, text, size, x, y, color=None, border=False, border_color=(0, 0, 0)):
         if color is None:
-            #color = self.WHITE
-         font_path = "assets/fonts/PressStart2P-Regular.ttf"
-         font = pygame.font.Font(font_path, size)
+            color = self.WHITE
+        font_path = "assets/fonts/PressStart2P-Regular.ttf"
+        font = pygame.font.Font(font_path, size)
 
-         text_surface = font.render(text, True, color)
-         text_rect = text_surface.get_rect()
-         text_rect.center = (x, y)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.center = (x, y)
 
         if border:
             # Desenha o texto ao redor da posição original para formar a borda

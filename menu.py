@@ -170,7 +170,6 @@ def tela_inicial():
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
-=======
 game_playing = False
 class Menu():
     def __init__(self, game):
