@@ -93,9 +93,9 @@ class Game():
                                 
             print(len(self.trash.rects))
             while len(self.trash.rects) == 0 and self.treecounter < 5:
-                tela_morte = pygame.image.load(r'assets\tela_morte.png').convert()
-                tela_morte = pygame.transform.scale(tela_morte,(self.DISPLAY_W, self.DISPLAY_H))
-                self.display.blit(tela_morte,(0,0))
+                tela_vitória = pygame.image.load(r'assets\tela_vitória.png').convert()
+                tela_vitória = pygame.transform.scale(tela_vitória,(self.DISPLAY_W, self.DISPLAY_H))
+                self.display.blit(tela_vitória,(0,0))
                 pygame.display.update()
                 self.window.blit(self.display, (0,0))
                 self.mapa += 1

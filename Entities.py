@@ -183,11 +183,23 @@ class Arvores():
         self.images = []
         self.frame_counter = 0
         self.counter = 0
-        for file in os.listdir(r'assets\Arvore\Growing Tree'):
-            image = pygame.image.load(fr'assets\Arvore\Growing Tree\{file}').convert_alpha()
-            image = pygame.transform.scale_by(image,1)
-            self.images.append(image)
-
+        self.manytrees = []
+        tree_name = 'ipê roxa'
+        for name in ['ipê roxa', 'ipê amarela', 'Growing Tree']:
+            if name == 'Growing Tree':
+                for file in os.listdir(rf'assets\Arvore\{name}'):
+                    image = pygame.image.load(fr'assets\Arvore\{name}\{file}').convert_alpha()
+                    image = pygame.transform.scale_by(image,1)
+                    self.images.append(image)
+                self.manytrees.append(self.images)
+                self.images = []
+            else:
+                for file in os.listdir(rf'assets\Arvore\{name}'):
+                    image = pygame.image.load(fr'assets\Arvore\{name}\{file}').convert_alpha()
+                    image = pygame.transform.scale_by(image,1.3)
+                    self.images.append(image)
+                self.manytrees.append(self.images)
+                self.images = []
     def add_tree(self, x, y, tilerects):
         # Ajuste o x para alinhar na grade de 32 (mais o offset que já usa)
         tile_x = x - x % 32 + 18
@@ -201,20 +213,23 @@ class Arvores():
             print('Já tenho árvore aqui')
             return
         # Se passou nas verificações, adiciona a árvore
-        self.tree_list.append([tile_x, tile_y, 0,0])
+        self.tree_list.append([tile_x, tile_y, 0,0,random.randint(0,2)])
         self.tree_dict[str((tile_x, tile_y))] = 1
 
-    def draw_trees(self, screen: pygame.Surface, offset):
-        self.frame_counter += 1
-        grow_frame = self.frame_counter % 3 == 0
-        self.tree_list.append([x-x%32+18,y,0])
-        self.tree_dict[str((x-x%32+18,y))] = 1  
+    # def draw_trees(self, screen: pygame.Surface, offset):
+    #     self.frame_counter += 1
+    #     grow_frame = self.frame_counter % 3 == 0
+    #     self.tree_list.append([x-x%32+18,y,0])
+    #     self.tree_dict[str((x-x%32+18,y))] = 1  
           
     def draw_trees (self,screen:pygame.Surface,offset):
         for tree in self.tree_list:
-            screen.blit(self.images[tree[2]], (tree[0] - offset[0] -8 , tree[1] - offset[1] - 129))
+            if tree[4] == 2:
+                screen.blit(self.manytrees[tree[4]][tree[2]], (tree[0] - offset[0] -8 , tree[1] - offset[1] - 129))
+            else:
+                screen.blit(self.manytrees[tree[4]][tree[2]], (tree[0] - offset[0] -8 , tree[1] - offset[1]-95))
             if tree[3] % 30 == 0: # Para atrasar o crescimento da árvore
-                tree[2] = min(len(self.images) - 1, tree[2] + 1)
+                tree[2] = min(len(self.manytrees[tree[4]]) - 1, tree[2] + 1)
             tree[3] += 1
 
 if __name__ == '__main__':
