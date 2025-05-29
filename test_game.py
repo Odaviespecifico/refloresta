@@ -1,16 +1,16 @@
 import pygame
 from utils import Spritesheet
 
-# Initialize pygame
+# Inicializar pygame
 pygame.init()
 
-# Set up display
+# Configurar o display
 WIDTH, HEIGHT = 255, 150
 canvas = pygame.Surface((WIDTH, HEIGHT))
 window = pygame.display.set_mode((WIDTH, HEIGHT),flags=pygame.SCALED)
 pygame.display.set_caption("Sprite Animation")
 
-# Load sprites
+# Carregar sprites
 run = Spritesheet(r'C:\Users\Davi\Documents\Progamação\refloresta\assets\player\Run.png')
 runSprites = run.get_sprites(1)  # Assuming this returns a list of sprites
 sprite_count = len(runSprites)
@@ -19,10 +19,10 @@ print(f"Loaded {sprite_count} sprites")
 idle = Spritesheet('assets\player\Idle.png')
 idleSprites = idle.get_sprites(1)
 
-# Animation variables
+# Variáveis de animação
 i = 0
 clock = pygame.time.Clock()
-FPS = 24  # Controls animation speed
+FPS = 24  # Controla velocidade da animação
 
 animation = 0
 
@@ -42,18 +42,18 @@ while running:
     # Clear canvas
     canvas.fill((255, 255, 255)) 
     
-    # Draw current sprite (centered)
+    # Desenhar sprite atual (centralizada)
     sprite_rect = idleSprites[i].get_rect(center=(WIDTH//2, HEIGHT//2))
     canvas.blit(idleSprites[i], sprite_rect)
     
-    # Update animation frame
+    # Atualizar frame de animação
     i = (i + 1) % len(idleSprites)  # This will loop back to 0 automatically
     
-    # Update display
+    # Atualizar display
     window.blit(canvas, (0, 0))
     pygame.display.flip()  # You don't need both flip() and update()
     
-    # Control frame rate
+    # Controlar a taxa de frames
     clock.tick(FPS)
 
 pygame.quit()

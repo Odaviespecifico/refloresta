@@ -22,7 +22,6 @@ class Game():
         #self.options = OptionsMenu(self)
         #self.credits = CreditsMenu(self)
         #self.curr_menu = self.main_menu
-        self.background = Background(5)
         self.jogador = Player()
         self.map = TileMap('assets\maps\map_test.csv')
         self.trash = Trash(self.map.toprectlist)
@@ -31,9 +30,12 @@ class Game():
         self.Arvores = Arvores()
         self.music_playing = False
         self.mapa = 0
+        self.background = Background(5)
         self.treecounter = 0
-        pygame.mixer.init() #inicia música
-        pygame.mixer.music.load("somteste.mp3") #pega a música
+        self.treeicon = pygame.image.load(r'assets\tree icon.png').convert_alpha()
+        self.treeicon = pygame.transform.scale(self.treeicon,(50,50))
+        pygame.mixer.init() # Inicia a música
+        pygame.mixer.music.load("somteste.mp3") # Carrega a música
 
     def game_loop(self):
         self.scroll = [0,0]
@@ -49,7 +51,8 @@ class Game():
                         self.tutorial = False
                         self.playing = True
                         break
-            print('cabra')
+                if event.type == pygame.QUIT:
+                    exit()
             self.tutorial_img = pygame.image.load("tutorial.png")
             self.tutorial_img = pygame.transform.scale(self.tutorial_img,(self.DISPLAY_W, self.DISPLAY_H))
             self.display.blit(self.tutorial_img,(0,0))
@@ -58,10 +61,9 @@ class Game():
             
         while self.playing:
             if not self.music_playing:
-                #tratamento de erro(que humberto pediu, então já coloquei na música)
                 try:
-                    pygame.mixer.music.play(-1) #música em loop
-                    self.music_playing = True #coloca pra tocar a música
+                    pygame.mixer.music.play(-1) # Música em loop
+                    self.music_playing = True # Coloca pra tocar a música
                 except pygame.error as erro:
                     print(f"Erro ao produzir a música: {erro}")
 
@@ -70,12 +72,11 @@ class Game():
             
             self.check_events()
             
-            ###Mudança de fase
-            
-            #Derrota:
+            ### Mudança de fase
+
+            # Derrota:
             posição_y = self.jogador.rect.y
             if posição_y > 1000:
-                print('morreu')
                 derrota = True
                 while derrota:
                     tela_morte = pygame.image.load(r'assets\tela_morte.png').convert()
@@ -90,15 +91,14 @@ class Game():
                             if event.key == pygame.K_RETURN:
                                 self.restart_level('map_test',0)
                                 derrota = False
-                
+            
+            # Verify and plant tree
             if self.jogador.arvore and self.Q_Key and self.treecounter >= 5:
                 self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
                 self.treecounter -= 5
             
+            # Preenche a tela comFill the display with a random color
             self.display.fill((45, 142, 193))
-            
-            #Show the tree icon
-            # if self.treecounter >= 5:
                 
             # Camera
             self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 15
@@ -150,7 +150,11 @@ class Game():
                     self.pontuação += 1
                     self.treecounter += 1
                     opacidade = min(60,opacidade + 3)
-            print(self.treecounter)
+                    
+            #Show the tree icon
+            if self.treecounter >= 5:
+                self.display.blit(self.treeicon,(self.DISPLAY_W-70,20))
+                
             # self.draw_text(f"Pontuação: {self.pontuação}", 20, 100, 30)        
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
@@ -180,6 +184,7 @@ class Game():
         self.jogador = Player()
         self.pontuação = 0
         self.Arvores = Arvores()
+        self.treecounter = False
         
     def check_events(self):
         for event in pygame.event.get():

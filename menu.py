@@ -9,24 +9,25 @@ LARGURA, ALTURA = 960, 540
 TELA = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Refloresta")
 
+
 # Cores
 BRANCO = (255, 255, 255)
-PRETO = (0, 0, 0)
-VERDE = (100, 200, 20)
-VERDE_ESCURO = (0, 150, 0)
-VERDE_CREDITOS = (84, 201, 55)
-LARANJA = (255, 153, 51)
-LARANJA_ESCURO = (205, 102, 0)
-VERMELHO = (200, 0, 0)
-VERMELHO_ESCURO = (150, 0, 0)
 BROWN = (139, 69, 19)
 BROWN_ESCURO = (101, 67, 33) 
-
+LARANJA = (255, 153, 51)
+LARANJA_ESCURO = (205, 102, 0)
+VERDE = (100, 200, 20)
+VERDE_CREDITOS = (84, 201, 55)
+VERDE_ESCURO = (0, 150, 0)
+VERMELHO = (200, 0, 0)
+VERMELHO_ESCURO = (150, 0, 0)
+PRETO = (0, 0, 0)
 
 # Fontes
-fonte_grande = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 36)
-fonte_pequena = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
-fonte_mais_que_pequena = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 10)
+FONTE_GRANDE = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 36)
+FONTE_PEQUENA = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
+FONTE_MAIS_QUE_PEQUENA = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 10)
+
 # Imagem de fundo
 imagem_fundo = pygame.image.load("assets/background/Menu/Background_Refloresta.png")
 imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA, ALTURA))  # Ajusta para o tamanho da tela
@@ -42,7 +43,7 @@ class Botao:
     def desenhar(self, superficie):
         pygame.draw.rect(superficie, self.cor_atual, self.rect)
         pygame.draw.rect(superficie, PRETO, self.rect, 2)
-        texto_surf = fonte_pequena.render(self.texto, True, PRETO)
+        texto_surf = FONTE_PEQUENA.render(self.texto, True, PRETO)
         texto_rect = texto_surf.get_rect(center=self.rect.center)
         superficie.blit(texto_surf, texto_rect)
         
@@ -92,7 +93,7 @@ def creditos():
                 sys.exit()
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 if botao_voltar.verificar_clique(evento.pos):
-                    return  # retorna ao menu principal
+                    return  # Retorna para o menu principal
                     rodando = False
 
         mouse_pos = pygame.mouse.get_pos()
@@ -101,7 +102,7 @@ def creditos():
         TELA.blit(fundo_creditos, (0, 0))
         TELA.blit(rect_fundo, (LARGURA - 830, 120))
 
-        desenhar_texto_com_borda("AGRADECIMENTOS", fonte_grande, BRANCO, PRETO, LARGURA//2, 100 - 30, TELA)
+        desenhar_texto_com_borda("AGRADECIMENTOS", FONTE_GRANDE, BRANCO, PRETO, LARGURA//2, 100 - 30, TELA)
         #titulo_rect = titulo.get_rect(center=(LARGURA//2, 100 - 30))
         #TELA.blit(titulo, titulo_rect)
 
@@ -120,7 +121,7 @@ def creditos():
             ]
         
         for i, linha in enumerate(creditos_texto):
-                texto = fonte_mais_que_pequena.render(linha, True, BRANCO)
+                texto = FONTE_MAIS_QUE_PEQUENA.render(linha, True, BRANCO)
                 TELA.blit(texto, (LARGURA//2 - texto.get_width()//2, 120 + i * 30))
                 
         botao_voltar.desenhar(TELA)
@@ -158,10 +159,10 @@ def tela_inicial():
         TELA.blit(imagem_fundo, (0, 0))
         
         # Título
-        #titulo = fonte_grande.render("REFLORESTA", True, BRANCO)
+        #titulo = FONTE_GRANDE.render("REFLORESTA", True, BRANCO)
         #titulo_rect = titulo.get_rect(center=(LARGURA//2, ALTURA//3))
         #TELA.blit(titulo, titulo_rect)
-        desenhar_texto_com_borda("REFLORESTA", fonte_grande, BRANCO, PRETO, LARGURA//2, ALTURA//3, TELA)
+        desenhar_texto_com_borda("REFLORESTA", FONTE_GRANDE, BRANCO, PRETO, LARGURA//2, ALTURA//3, TELA)
 
         # Botões
         botao_iniciar.desenhar(TELA)
@@ -209,7 +210,6 @@ class Tutorial(Menu):
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 if event.key == pygame.K_RETURN:
-                    print('kk')
                     game_playing = True
                     
         self.game.display.blit(self.tutorial_img, (0, 0))
@@ -233,7 +233,7 @@ class MainMenu(Menu):
         self.run_display = True
         while self.run_display:
             self.game.check_events()
-            self.check_input() #Verifica qual opção o jogador selecionou
+            self.check_input() # Verifica qual opção o jogador selecionou
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('ReFloresta', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
             self.game.draw_text("Começar jogo", 20, self.startx, self.starty)
@@ -243,8 +243,6 @@ class MainMenu(Menu):
             self.draw_cursor()
             self.blit_screen()
             
-
-
     def move_cursor(self):
         if self.game.DOWN_KEY:
             if self.state == 'Start':

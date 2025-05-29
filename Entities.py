@@ -101,7 +101,7 @@ class Player(pygame.sprite.Sprite):
                 
     def animate(self):
         now = pygame.time.get_ticks()
-        if self.state == 'idle':  # personagem fica parado
+        if self.state == 'idle':  # O personagem fica parado
             if now - self.last_updated > 1000/len(self.idle_frames_right):
                 self.last_updated = now
                 self.current_frame = (self.current_frame+1) % len(self.idle_frames_right)
@@ -111,7 +111,7 @@ class Player(pygame.sprite.Sprite):
                 self.current_image = self.idle_frames_left[self.current_frame]
             else:
                 self.current_image = self.idle_frames_right[self.current_frame]
-        if self.state == 'run':  # personagem corre
+        if self.state == 'run':  # O personagem corre
             if now - self.last_updated > 1000/len(self.run_frames_right):
                 self.last_updated = now
                 self.current_frame = (self.current_frame+1) % len(self.run_frames_right)
@@ -120,7 +120,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.current_image = self.run_frames_right[self.current_frame]
                 
-        if self.state == 'walk':  # personagem anda
+        if self.state == 'walk':  # O personagem anda
             if now - self.last_updated > 1000/len(self.walk_frames_right):
                 self.last_updated = now
                 self.current_frame = (self.current_frame+1) % len(self.walk_frames_right)
@@ -166,7 +166,7 @@ class Trash(pygame.sprite.Sprite):
         for i in range(self.quantidade):
             posição = random.randint(0,len(tilemap))
             self.posições.add(posição)
-            
+        print(len(self.posições)) 
         for i in self.posições:
             self.rects.append(pygame.Rect(self.tiles[i-1][0],self.tiles[i-1][1]-32,32,32))
             self.trash_sprite.append(random.randint(0,len(self.images)-1))
@@ -194,7 +194,7 @@ class Arvores():
         tile_y = y
 
         # Criar retângulo da árvore (largura e altura aproximadas da árvore)
-        tree_rect = pygame.Rect(tile_x, tile_y, 32, 70)  # pode ajustar tamanho se precisar
+        tree_rect = pygame.Rect(tile_x, tile_y, 32, 70)  # Pode ajustar o tamanho, caso necessário
 
         # Verifica se já tem árvore ali
         if str((tile_x, tile_y)) in self.tree_dict:
@@ -213,7 +213,7 @@ class Arvores():
     def draw_trees (self,screen:pygame.Surface,offset):
         for tree in self.tree_list:
             screen.blit(self.images[tree[2]], (tree[0] - offset[0] -8 , tree[1] - offset[1] - 129))
-            if tree[3] % 30 == 0: #Para atrasar o crescimento da árvore
+            if tree[3] % 30 == 0: # Para atrasar o crescimento da árvore
                 tree[2] = min(len(self.images) - 1, tree[2] + 1)
             tree[3] += 1
 
