@@ -31,6 +31,7 @@ class Game():
         self.Arvores = Arvores()
         self.music_playing = False
         self.mapa = 0
+        self.treecounter = 0
         pygame.mixer.init() #inicia música
         pygame.mixer.music.load("somteste.mp3") #pega a música
 
@@ -70,7 +71,7 @@ class Game():
             self.check_events()
             
             ###Mudança de fase
-                
+            
             #Derrota:
             posição_y = self.jogador.rect.y
             if posição_y > 1000:
@@ -90,11 +91,15 @@ class Game():
                                 self.restart_level('map_test',0)
                                 derrota = False
                 
-            if self.jogador.arvore and self.Q_Key:
+            if self.jogador.arvore and self.Q_Key and self.treecounter >= 5:
                 self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
+                self.treecounter -= 5
             
             self.display.fill((45, 142, 193))
             
+            #Show the tree icon
+            # if self.treecounter >= 5:
+                
             # Camera
             self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 15
             self.scroll[1] += (self.jogador.rect.y - self.display.get_height() / 2 - self.scroll[1]) / 15
@@ -143,8 +148,9 @@ class Game():
                     self.trash.rects.pop(colideindex)
                     self.trash.trash_sprite.pop(colideindex)
                     self.pontuação += 1
+                    self.treecounter += 1
                     opacidade = min(60,opacidade + 3)
-
+            print(self.treecounter)
             # self.draw_text(f"Pontuação: {self.pontuação}", 20, 100, 30)        
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
