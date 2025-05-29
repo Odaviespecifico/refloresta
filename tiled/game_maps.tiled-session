@@ -17,6 +17,9 @@
                 "y": 1348
             }
         },
+        "TX Tileset Ground.tsx": {
+            "dynamicWrapping": false
+        },
         "TileSet.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 1,
@@ -26,6 +29,9 @@
             "dynamicWrapping": true,
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "Tiles_Village.tsx": {
+            "dynamicWrapping": true
         },
         "Village.tsx": {
             "scaleInDock": 1,
@@ -50,7 +56,7 @@
     },
     "last.exportedFilePath": "C:/Users/Davi/Documents/Progamação/refloresta/assets/maps",
     "last.externalTilesetPath": "C:/Users/Davi/Documents/Progamação/refloresta/tiled",
-    "last.imagePath": "C:/Users/Davi/Documents/Progamação/refloresta/assets/Tiles",
+    "last.imagePath": "C:/Users/Davi/Downloads/Pixel Art Platformer - Village Props v2.3.0/Texture",
     "map.fixedSize": false,
     "map.lastUsedExportFilter": "Arquivos CSV (*.csv)",
     "map.lastUsedFormat": "tmx",
@@ -67,5 +73,5 @@
     ],
     "tileset.lastUsedFilter": "Ficheiros de conjunto de tiles Tiled (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
-    "tileset.type": 1
+    "tileset.type": 0
 }

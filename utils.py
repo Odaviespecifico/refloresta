@@ -20,7 +20,12 @@ class Spritesheet:
         for sprite in range(quantidade):
             self.sprites.append(self.get_sprite(sprite*128,0))
         return self.sprites
-        
+    
+    def get_tile_sprites(self):
+        for x in range(16):
+            for y in range(16):
+                self.sprites.append(self.get_sprite(x*32,y*32,32,32))
+                print(x,y)
 class Background:
     def __init__(self,copias):
         print('carregando o fundo')
@@ -37,7 +42,7 @@ class Background:
             self.images.append(superficie)
         for index in range(len(self.images)):
             self.images[index] = pygame.transform.scale_by(self.images[index],0.3)
-        
+
         
         # Modifica a escala para preencher a tela do jogo
         self.rect = self.images[0].get_rect()
@@ -49,9 +54,8 @@ class TileMap():
         self.surface = pygame.Surface((10000,10000))
         self.surface.set_colorkey((0,0,0))
         self.tiles = []
-        for tileimage in os.listdir('assets\Tiles'):
-            self.tiles.append(pygame.image.load(fr'assets\Tiles\{tileimage}').convert_alpha())
-        self.tiles.pop()
+        self.spritesheet = Spritesheet(r'assets\Tiles\tilesets\TX Tileset Ground.png',32,32)
+        self.spritesheet.get_tile_sprites()
         self.putinasurface()
         self.gettilerects()
         self.gettoprects()
@@ -71,10 +75,8 @@ class TileMap():
         for line in self.tilemap:
             for column in line:
                 if column != '-1':
-                    if column == '25':
-                        self.surface.blit(self.tiles[-1],(y*32,x*32))
-                    else:
-                        self.surface.blit(self.tiles[int(column)],(y*32,x*32))
+                    print(self.spritesheet.sprites)
+                    self.surface.blit(self.spritesheet.sprites[int(column)],(y*32,x*32))
                     c += 1
                 y += 1
             x += 1
