@@ -92,13 +92,14 @@ class Game():
                                 derrota = False
                                 
             print(len(self.trash.rects))
+            if len(self.trash.rects) == 0 and self.treecounter < 5:
+                self.mapa += 1
             while len(self.trash.rects) == 0 and self.treecounter < 5:
                 tela_vitória = pygame.image.load(r'assets\tela_vitória.png').convert()
                 tela_vitória = pygame.transform.scale(tela_vitória,(self.DISPLAY_W, self.DISPLAY_H))
                 self.display.blit(tela_vitória,(0,0))
                 pygame.display.update()
                 self.window.blit(self.display, (0,0))
-                self.mapa += 1
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         exit()
@@ -106,6 +107,8 @@ class Game():
                         if event.key == pygame.K_RETURN:
                             if self.mapa == 1:
                                 self.restart_level('map1',0)
+                            if self.mapa == 2:
+                                self.restart_level('map2',0)
                             derrota = False
             
             # Verify and plant tree

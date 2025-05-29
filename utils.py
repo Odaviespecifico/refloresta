@@ -22,10 +22,11 @@ class Spritesheet:
         return self.sprites
     
     def get_tile_sprites(self):
-        for x in range(16):
-            for y in range(16):
+        for y in range(16):
+            for x in range(16):
                 self.sprites.append(self.get_sprite(x*32,y*32,32,32))
                 print(x,y)
+                
 class Background:
     def __init__(self,copias):
         print('carregando o fundo')
@@ -87,11 +88,17 @@ class TileMap():
         
     def gettilerects(self):
         self.rectlist = []
-        noncolide_rects = {'14','15','11','-1','3','4','5','6','7','8','9','10','12','16','17','19'}
+        noncolide_rects = {16,17,18,32,33,34,64,65,66,80,81,82,96,98,74,75,76,72,77,79,88,90,91,92,93,95,102,103,104,106,107,108,109,110,111,116,118,119,120,122,123,124,125,126,127,132,134,136,137,138,139,140,141,
+                           143,148,150,152,153,154,155,156,157,159,164,165,166,167,168,171,173,175,
+                           180,181,182,183,184,187,189,191,
+                           196,197,198,199,200,202,205,
+                           212,213,214,215,216,218,228,230,231,232,234,
+                           237,238,239,
+                           244,246,247,248,250,253,254,255,-1}
         x,y = 0,0
         for line in self.tilemap:
             for column in line:
-                if column not in noncolide_rects:
+                if int(column) not in noncolide_rects:
                     self.rectlist.append((y*32,x*32,32,32))
                 y += 1
             x += 1
@@ -99,11 +106,11 @@ class TileMap():
                 
     def gettoprects(self):
         self.toprectlist = []
-        grass_rects = ['1','2','0','13','18','20','21','22','23','24','25'] # Onde o lixo pode spawnar
+        grass_rects = [0,1,2,4,5,7,9,10,12,13,52,54,55,56,57,58,59,60,61,62,63,84,86,87,89,94,97,117,121,128,130,149,151,158,192,193,194,186,217,219,220,222,223,224,225,226,245,249,251] # Onde o lixo pode spawnar
         x,y = 0,0
         for line in self.tilemap:
             for column in line:
-                if column in grass_rects:
+                if int(column) in grass_rects:
                     self.toprectlist.append((y*32,x*32,32,32))
                 y += 1
             x += 1
