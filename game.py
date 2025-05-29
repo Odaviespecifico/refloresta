@@ -69,14 +69,13 @@ class Game():
 
             self.clock.tick(60)
             # print(self.clock.get_fps()) #Mostrar FPS
-            
             self.check_events()
             
             ### Mudança de fase
-
+            
             # Derrota:
             posição_y = self.jogador.rect.y
-            if posição_y > 1000:
+            if posição_y > 1500:
                 derrota = True
                 while derrota:
                     tela_morte = pygame.image.load(r'assets\tela_morte.png').convert()
@@ -91,6 +90,23 @@ class Game():
                             if event.key == pygame.K_RETURN:
                                 self.restart_level('map_test',0)
                                 derrota = False
+                                
+            print(len(self.trash.rects))
+            while len(self.trash.rects) == 0 and self.treecounter < 5:
+                tela_morte = pygame.image.load(r'assets\tela_morte.png').convert()
+                tela_morte = pygame.transform.scale(tela_morte,(self.DISPLAY_W, self.DISPLAY_H))
+                self.display.blit(tela_morte,(0,0))
+                pygame.display.update()
+                self.window.blit(self.display, (0,0))
+                self.mapa += 1
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        exit()
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_RETURN:
+                            if self.mapa == 1:
+                                self.restart_level('map1',0)
+                            derrota = False
             
             # Verify and plant tree
             if self.jogador.arvore and self.Q_Key and self.treecounter >= 5:

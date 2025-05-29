@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         self.L_Key,self.R_Key,self.Flip = False,False,False
         self.SHIFT = False
         self.load_frames()
-        self.rect = pygame.Rect(0,0,32,70)
+        self.rect = pygame.Rect(0,800,32,70)
         self.rect.y = -10
         self.rect.x = -40
         self.current_frame = 0
@@ -153,7 +153,7 @@ class Trash(pygame.sprite.Sprite):
         self.tiles = tilemap
         self.trash = list()
         self.posições = set()
-        self.quantidade = 30
+        self.quantidade = 50
         self.rects = []
         self.trash_sprite = []
         self.images = []

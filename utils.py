@@ -85,7 +85,7 @@ class TileMap():
         
     def gettilerects(self):
         self.rectlist = []
-        noncolide_rects = {'4','14','15','11','-1'}
+        noncolide_rects = {'14','15','11','-1','3','4','5','6','7','8','9','10','12','16','17','19'}
         x,y = 0,0
         for line in self.tilemap:
             for column in line:
