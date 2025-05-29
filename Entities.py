@@ -168,8 +168,6 @@ class Trash(pygame.sprite.Sprite):
             self.posições.add(posição)
             
         for i in self.posições:
-            print(self.posições)
-            print(i)
             self.rects.append(pygame.Rect(self.tiles[i-1][0],self.tiles[i-1][1]-32,32,32))
             self.trash_sprite.append(random.randint(0,len(self.images)-1))
     

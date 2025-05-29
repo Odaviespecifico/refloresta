@@ -9,8 +9,8 @@ class Game():
         self.running, self.playing = True, False
         self.UP_KEY = self.DOWN_KEY = self.START_KEY = self.BACK_KEY = False
         self.SPACE_KEY = self.E_Key = self.Q_Key = False
-        scale = 60
-        self.DISPLAY_W, self.DISPLAY_H = 16*scale, 9*scale
+        self.scale = 60
+        self.DISPLAY_W, self.DISPLAY_H = 16*self.scale, 9*self.scale
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.clock = pygame.time.Clock()
         self.window = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
@@ -30,6 +30,7 @@ class Game():
         self.fullscreen = False
         self.Arvores = Arvores()
         self.music_playing = False
+        self.mapa = 0
         pygame.mixer.init() #inicia música
         pygame.mixer.music.load("somteste.mp3") #pega a música
 
@@ -53,6 +54,7 @@ class Game():
             self.display.blit(self.tutorial_img,(0,0))
             pygame.display.update()
             self.window.blit(self.display, (0,0))
+            
         while self.playing:
             if not self.music_playing:
                 #tratamento de erro(que humberto pediu, então já coloquei na música)
@@ -66,13 +68,28 @@ class Game():
             # print(self.clock.get_fps()) #Mostrar FPS
             
             self.check_events()
-            if self.START_KEY: #Teste de mudar de fase
-                # self.playing= False
-                self.map = TileMap('assets\maps\map1.csv')
-                self.trash = Trash(self.map.toprectlist)
-                self.jogador = Player()
-                self.pontuação = 0
             
+            ###Mudança de fase
+                
+            #Derrota:
+            posição_y = self.jogador.rect.y
+            if posição_y > 1000:
+                print('morreu')
+                derrota = True
+                while derrota:
+                    tela_morte = pygame.image.load(r'assets\tela_morte.png').convert()
+                    tela_morte = pygame.transform.scale(tela_morte,(self.DISPLAY_W, self.DISPLAY_H))
+                    self.display.blit(tela_morte,(0,0))
+                    pygame.display.update()
+                    self.window.blit(self.display, (0,0))
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            exit()
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_RETURN:
+                                self.restart_level('map_test',0)
+                                derrota = False
+                
             if self.jogador.arvore and self.Q_Key:
                 self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
             
@@ -122,15 +139,13 @@ class Game():
                 colidedrect = self.trash.rects[phisicsrect.collidelist(self.trash.rects)]
                 # pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32)) #####when colision true, it changes colour from red to blue
                 if self.E_Key:
-                    print(f'Antes: {self.trash.rects = } e {self.trash.trash_sprite = }')
                     colideindex = phisicsrect.collidelist(self.trash.rects)
                     self.trash.rects.pop(colideindex)
                     self.trash.trash_sprite.pop(colideindex)
                     self.pontuação += 1
-                    print(f'Depois: {self.trash.rects = } e {self.trash.trash_sprite = }')
                     opacidade = min(60,opacidade + 3)
 
-            self.draw_text(f"Pontuação: {self.pontuação}", 20, 100, 30)        
+            # self.draw_text(f"Pontuação: {self.pontuação}", 20, 100, 30)        
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
             
@@ -152,6 +167,14 @@ class Game():
             # print(self.jogador.L_Key,self.jogador.R_key)
             self.reset_keys()
 
+
+    def restart_level(self,map,state=0):
+        self.map = TileMap(f'assets\maps\{map}.csv')
+        self.trash = Trash(self.map.toprectlist)
+        self.jogador = Player()
+        self.pontuação = 0
+        self.Arvores = Arvores()
+        
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
