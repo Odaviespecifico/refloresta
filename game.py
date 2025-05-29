@@ -39,8 +39,6 @@ class Game():
 
     def game_loop(self):
         self.scroll = [0,0]
-        yspeed = 0
-        GRAVIDADE = 0.5
         opacidade = 0
         self.tutorial = True
         pontuação_maxima = len(self.trash.rects)
@@ -198,12 +196,14 @@ class Game():
 
 
     def restart_level(self,map,state=0):
+        global pontuação_maxima
         self.map = TileMap(f'assets\maps\{map}.csv')
         self.trash = Trash(self.map.toprectlist)
         self.jogador = Player()
         self.pontuação = 0
         self.Arvores = Arvores()
         self.treecounter = False
+        pontuação_maxima = len(self.trash.rects)
         if state == 1:
             self.mapa = 0
         

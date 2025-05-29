@@ -26,7 +26,7 @@ PRETO = (0, 0, 0)
 # Fontes
 FONTE_GRANDE = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 36)
 FONTE_PEQUENA = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
-FONTE_MAIS_QUE_PEQUENA = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 10)
+FONTE_MAIS_QUE_PEQUENA = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 15)
 
 # Imagem de fundo
 imagem_fundo = pygame.image.load("assets/background/Menu/Background_Refloresta.png")
@@ -84,7 +84,7 @@ def creditos():
     botao_voltar = Botao(LARGURA//2 - 100, ALTURA - 100, 200, 50, "Voltar", VERDE, VERDE_ESCURO)
 
     rect_fundo = pygame.Surface((700, 300), pygame.SRCALPHA)
-    pygame.draw.rect(rect_fundo, (*VERDE_ESCURO, 180), (0,0, 700, 300), border_radius=10)
+    pygame.draw.rect(rect_fundo, ((0,0,0,180)), (0,0, 700, 300), border_radius=10)
 
     while rodando:
         for evento in pygame.event.get():
@@ -115,8 +115,8 @@ def creditos():
                 "",
                 "Agradecimentos especiais:",
                 ""
-                "Coord. Patrícia Mergulhão, CCB Social, Guilherme Enrique, ",
-                "Leonardo Rafael"
+                "Coord. Patrícia Mergulhão, CCB Social,",
+                "Guilherme Enrique, Leonardo Rafael"
                 
             ]
         
