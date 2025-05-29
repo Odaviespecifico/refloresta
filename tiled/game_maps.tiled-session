@@ -38,19 +38,19 @@
             "scaleInEditor": 1
         },
         "map1.tmx": {
-            "scale": 0.125,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 3552,
-                "y": 444
+                "x": 2662.5,
+                "y": 390.5
             }
         },
         "map2.tmx": {
-            "scale": 0.33,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 596.9696969696969,
-                "y": 746.969696969697
+                "x": 2176.6666666666665,
+                "y": 66
             }
         }
     },

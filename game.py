@@ -88,7 +88,7 @@ class Game():
                             exit()
                         if event.type == pygame.KEYDOWN:
                             if event.key == pygame.K_RETURN:
-                                self.restart_level('map_test',0)
+                                self.restart_level('map_test',1)
                                 derrota = False
                                 
             print(len(self.trash.rects))
@@ -204,6 +204,8 @@ class Game():
         self.pontuação = 0
         self.Arvores = Arvores()
         self.treecounter = False
+        if state == 1:
+            self.mapa = 0
         
     def check_events(self):
         for event in pygame.event.get():

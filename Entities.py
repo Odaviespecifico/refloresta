@@ -29,14 +29,14 @@ class Player(pygame.sprite.Sprite):
         if self.L_Key:
             if self.SHIFT:
                 self.velocity_x = -self.speed * self.speed_mult
-                self.speed_mult = min(2, self.speed_mult + 0.2)
+                self.speed_mult = min(1.5, self.speed_mult + 0.1)
             else:
                 self.velocity_x = -self.speed
             self.Flip = True
         if self.R_Key:
             if self.SHIFT:
                 self.velocity_x = self.speed * self.speed_mult
-                self.speed_mult = min(2, self.speed_mult + 0.2)
+                self.speed_mult = min(1.5, self.speed_mult + 0.1)
             else:
                 self.velocity_x = self.speed
             self.Flip = False
