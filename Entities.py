@@ -48,7 +48,6 @@ class Player(pygame.sprite.Sprite):
         phisicsrect = pygame.Rect(self.rect[0]+50,self.rect[1],32,70)
             
         if phisicsrect.collidelistall(tilerects):
-            print(phisicsrect.collidelistall(tilerects))
             if self.velocity_x > 0:
                     self.rect.x = memoryrect.x
                     
@@ -151,7 +150,7 @@ class Trash(pygame.sprite.Sprite):
         self.tiles = tilemap
         self.trash = list()
         self.posições = set()
-        self.quantidade = 50
+        self.quantidade = 30
         self.rects = []
         self.trash_sprite = []
         self.images = []
