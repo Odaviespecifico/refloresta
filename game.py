@@ -37,7 +37,7 @@ class Game():
         
         self.font = pygame.font.Font('assets/fonts/PressStart2P-Regular.ttf', 25)
         pygame.mixer.init() # Inicia a música
-        pygame.mixer.music.load("somteste.mp3") # Carrega a música
+        pygame.mixer.music.load("musica.mp3") # Carrega a música
 
     def game_loop(self):
         global loop_start,opacidade, pontuação_maxima
