@@ -23,7 +23,7 @@ class Game():
         #self.credits = CreditsMenu(self)
         #self.curr_menu = self.main_menu
         self.jogador = Player()
-        self.maplist = ['map1','map2','map_test']
+        self.maplist = ['map_test','map1','map2']
         self.map = TileMap(fr'assets\maps\{self.maplist[0]}.csv')
         self.trash = Trash(self.map.toprectlist)
         self.pontuação = 0
@@ -67,7 +67,7 @@ class Game():
                     print(f"Erro ao produzir a música: {erro}")
 
             self.clock.tick(60)
-            print(self.clock.get_fps()) #Mostrar FPS
+            # print(self.clock.get_fps()) #Mostrar FPS
             self.check_events()
             
             ### Mudança de fase
@@ -111,13 +111,11 @@ class Game():
                         exit()
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
-                            if self.mapa == 1:
-                                self.restart_level(self.maplist[1],0)
-                            if self.mapa == 2:
-                                self.restart_level(self.maplist[2],0)
-                            if self.mapa == 3:
+                            if self.mapa == len(self.maplist):
                                 self.playing = False
                                 self.treecounter = 30
+                            else:
+                                self.restart_level(self.maplist[self.mapa],0)
                             derrota = False
             
             # Verify and plant tree
@@ -178,7 +176,8 @@ class Game():
                     self.pontuação += 1
                     self.treecounter += 1
                     opacidade = min(60,opacidade + 3)
-                    
+            
+            
             #Show the tree icon
             if self.treecounter >= 5:
                 self.display.blit(self.treeicon,(self.DISPLAY_W-70,20))
@@ -186,7 +185,8 @@ class Game():
             # self.draw_text(f"Pontuação: {self.pontuação}", 20, 100, 30)        
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
-            
+            # offset_rect = [self.jogador.rect[0]-self.scroll[0]+50,self.jogador.rect[1]-self.scroll[1],self.jogador.rect[2],self.jogador.rect[3]]
+            # pygame.draw.rect(self.display,(23,40,99),offset_rect)
             #####Barra de pontuação
             #Mudança de cor
             incremento = 255/pontuação_maxima
@@ -232,8 +232,6 @@ class Game():
                         self.DOWN_KEY = True
                     case pygame.K_UP:
                         self.UP_KEY = True
-                    case pygame.K_SPACE:
-                        self.SPACE_KEY = True
                     case pygame.K_e:
                         self.E_Key = True
                     case pygame.K_q:
@@ -267,7 +265,10 @@ class Game():
                                 self.fullscreen = True
                                 break
                     
-
+        key = pygame.key.get_pressed()
+        if key[pygame.K_SPACE]:
+            self.SPACE_KEY = True
+        
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key, self.Q_Key = False, False, False, False, False, False, False
 
