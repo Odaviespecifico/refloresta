@@ -23,7 +23,8 @@ class Game():
         #self.credits = CreditsMenu(self)
         #self.curr_menu = self.main_menu
         self.jogador = Player()
-        self.map = TileMap('assets\maps\map_test.csv')
+        self.maplist = ['map1','map2','map_test']
+        self.map = TileMap(fr'assets\maps\{self.maplist[0]}.csv')
         self.trash = Trash(self.map.toprectlist)
         self.pontuação = 0
         self.fullscreen = False
@@ -66,7 +67,7 @@ class Game():
                     print(f"Erro ao produzir a música: {erro}")
 
             self.clock.tick(60)
-            # print(self.clock.get_fps()) #Mostrar FPS
+            print(self.clock.get_fps()) #Mostrar FPS
             self.check_events()
             
             ### Mudança de fase
@@ -84,19 +85,26 @@ class Game():
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
                             exit()
+                            self.playing = False
                         if event.type == pygame.KEYDOWN:
                             if event.key == pygame.K_RETURN:
-                                self.restart_level('map_test',1)
+                                self.restart_level(self.maplist[0],1)
                                 derrota = False
                                 
-            print(len(self.trash.rects))
             if len(self.trash.rects) == 0 and self.treecounter < 5:
                 self.mapa += 1
+                
             while len(self.trash.rects) == 0 and self.treecounter < 5:
                 tela_vitória = pygame.image.load(r'assets\tela_vitória.png').convert()
                 tela_vitória = pygame.transform.scale(tela_vitória,(self.DISPLAY_W, self.DISPLAY_H))
-                self.display.blit(tela_vitória,(0,0))
+                tela_fim = pygame.image.load(r'assets\tela_fim.png').convert()
+                tela_fim = pygame.transform.scale(tela_fim,(self.DISPLAY_W, self.DISPLAY_H))
+                if self.mapa != 3:
+                    self.display.blit(tela_vitória,(0,0))
+                else:
+                    self.display.blit(tela_fim,(0,0))
                 pygame.display.update()
+                
                 self.window.blit(self.display, (0,0))
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -104,9 +112,12 @@ class Game():
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
                             if self.mapa == 1:
-                                self.restart_level('map1',0)
+                                self.restart_level(self.maplist[1],0)
                             if self.mapa == 2:
-                                self.restart_level('map2',0)
+                                self.restart_level(self.maplist[2],0)
+                            if self.mapa == 3:
+                                self.playing = False
+                                self.treecounter = 30
                             derrota = False
             
             # Verify and plant tree
@@ -135,7 +146,7 @@ class Game():
             #Blit the repeating background
             i = 2
             for background in self.background.images:
-                self.display.blit(background,((-300)-self.scroll[0]*i/10,0))
+                self.display.blit(background,((-500)-self.scroll[0]*i/10,0))
                 i += 1
             filtro = pygame.surface.Surface((self.DISPLAY_W,self.DISPLAY_H))
             filtro.set_alpha(opacidade)
@@ -191,7 +202,6 @@ class Game():
             #atualizar a tela
             pygame.display.update()
             self.window.blit(self.display, (0,0))
-            # print(self.jogador.L_Key,self.jogador.R_key)
             self.reset_keys()
 
 

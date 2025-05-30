@@ -166,7 +166,6 @@ class Trash(pygame.sprite.Sprite):
         for i in range(self.quantidade):
             posição = random.randint(0,len(tilemap))
             self.posições.add(posição)
-        print(len(self.posições)) 
         for i in self.posições:
             self.rects.append(pygame.Rect(self.tiles[i-1][0],self.tiles[i-1][1]-32,32,32))
             self.trash_sprite.append(random.randint(0,len(self.images)-1))
@@ -210,7 +209,6 @@ class Arvores():
 
         # Verifica se já tem árvore ali
         if str((tile_x, tile_y)) in self.tree_dict:
-            print('Já tenho árvore aqui')
             return
         # Se passou nas verificações, adiciona a árvore
         self.tree_list.append([tile_x, tile_y, 0,0,random.randint(0,2)])

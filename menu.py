@@ -148,7 +148,7 @@ def tela_inicial():
                     sys.exit()
                 if botao_creditos.verificar_clique(evento.pos):
                     creditos()
-                      
+    
     
         mouse_pos = pygame.mouse.get_pos()
         botao_iniciar.verificar_hover(mouse_pos)

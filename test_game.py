@@ -14,7 +14,6 @@ pygame.display.set_caption("Sprite Animation")
 run = Spritesheet(r'C:\Users\Davi\Documents\Progamação\refloresta\assets\player\Run.png')
 runSprites = run.get_sprites(1)  # Assuming this returns a list of sprites
 sprite_count = len(runSprites)
-print(f"Loaded {sprite_count} sprites")
 
 idle = Spritesheet('assets\player\Idle.png')
 idleSprites = idle.get_sprites(1)
