@@ -60,7 +60,7 @@ class Game():
                         self.playing = True
                         break
                 if event.type == pygame.QUIT:
-                    exit()
+                    sys.exit()
             self.tutorial_img = pygame.image.load("tutorial.png")
             self.tutorial_img = pygame.transform.scale(self.tutorial_img,(self.DISPLAY_W, self.DISPLAY_H))
             self.display.blit(self.tutorial_img,(0,0))
@@ -286,7 +286,7 @@ class Game():
                 self.window.blit(self.display, (0,0))
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        exit()
+                        sys.exit()
                         self.playing = False
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
@@ -315,7 +315,7 @@ class Game():
             self.window.blit(self.display, (0,0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    exit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         if self.mapa == len(self.maplist):
