@@ -151,6 +151,7 @@ class Game():
             self.display.blit(self.font.render(str(round(self.time_of_map/1000,2)),True,(132,176,103)),(70,19)) #TODO Ajust position
             #Display the clock icon
             self.display.blit(self.clockicon,(20,5))
+            print(self.times)
             #Para fazer o fundo do texto
             try:
                 if textRect.size[0] < self.font.render(str(self.time_of_map/1000),True,(132,176,103)).get_rect().size[0]:
