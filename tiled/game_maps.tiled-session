@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Mainmap.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
         "."
     ],
@@ -14,7 +14,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": -938,
-                "y": 1348
+                "y": 1346
             }
         },
         "TX Tileset Ground.tsx": {
@@ -31,7 +31,8 @@
             "scaleInEditor": 1
         },
         "Tiles_Village.tsx": {
-            "dynamicWrapping": true
+            "dynamicWrapping": true,
+            "scaleInDock": 1
         },
         "Village.tsx": {
             "scaleInDock": 1,
@@ -81,9 +82,9 @@
     ],
     "project": "game_maps.tiled-project",
     "recentFiles": [
+        "Mainmap.tmx",
         "noncollide.tmx",
         "TileSetNew.tsx",
-        "Mainmap.tmx",
         "map1.tmx",
         "Village.tsx",
         "TileSet.tsx"

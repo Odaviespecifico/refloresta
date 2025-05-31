@@ -42,36 +42,33 @@ class Player(pygame.sprite.Sprite):
             self.Flip = False
             # self.rect.top -= 15
             
-        self.rect.x += self.velocity_x
         
-        if self.Flip:
-            phisicsrect = pygame.Rect(self.rect[0]+50,self.rect[1],32,70)
-        else:
-            phisicsrect = pygame.Rect(self.rect[0]+40,self.rect[1],32,70)
+        memoryrect = pygame.Rect(self.rect[0],self.rect[1],32,70)
+        self.rect.x += self.velocity_x
+        phisicsrect = pygame.Rect(self.rect[0]+50,self.rect[1],32,70)
             
         if phisicsrect.collidelistall(tilerects):
             if self.velocity_x > 0:
-                    self.rect.right = tilerects[phisicsrect.collidelist(tilerects)][0] - 40
+                    self.rect.x = memoryrect.x
+                    
             if self.velocity_x < 0:
-                self.rect.left = pygame.Rect(tilerects[phisicsrect.collidelist(tilerects)]).right -50
+                    self.rect.x = memoryrect.x
                 
         self.velocity_y += 0.6
-        self.rect.y += self.velocity_y
         
-        if self.Flip:
-            phisicsrect = pygame.Rect(self.rect[0]+50,self.rect[1],32,70)
-        else:
-            phisicsrect = pygame.Rect(self.rect[0]+40,self.rect[1],32,70)
+        memoryrect = pygame.Rect(self.rect[0]+50,self.rect[1],32,70)
+        self.rect.y += self.velocity_y
+        phisicsrect = pygame.Rect(self.rect[0]+50,self.rect[1],32,70)
             
         if phisicsrect.collidelistall(tilerects):
             if self.velocity_y > 0:
-                    self.rect.bottom = pygame.Rect(tilerects[phisicsrect.collidelist(tilerects)]).top
-                    self.velocity_y = 0
                     self.canJump = True
+                    self.velocity_y = 0
                     self.arvore = True
+                    self.rect.bottom = memoryrect.bottom
                     
             if self.velocity_y < 0:
-                    self.rect.top = tilerects[phisicsrect.collidelist(tilerects)][1]+32
+                    self.rect.top = memoryrect.top
                     self.velocity_y = 0
         
         if jump:
@@ -153,7 +150,7 @@ class Trash(pygame.sprite.Sprite):
         self.tiles = tilemap
         self.trash = list()
         self.posições = set()
-        self.quantidade = 50
+        self.quantidade = 30
         self.rects = []
         self.trash_sprite = []
         self.images = []
@@ -166,7 +163,6 @@ class Trash(pygame.sprite.Sprite):
         for i in range(self.quantidade):
             posição = random.randint(0,len(tilemap))
             self.posições.add(posição)
-        print(len(self.posições)) 
         for i in self.posições:
             self.rects.append(pygame.Rect(self.tiles[i-1][0],self.tiles[i-1][1]-32,32,32))
             self.trash_sprite.append(random.randint(0,len(self.images)-1))
@@ -210,7 +206,6 @@ class Arvores():
 
         # Verifica se já tem árvore ali
         if str((tile_x, tile_y)) in self.tree_dict:
-            print('Já tenho árvore aqui')
             return
         # Se passou nas verificações, adiciona a árvore
         self.tree_list.append([tile_x, tile_y, 0,0,random.randint(0,2)])

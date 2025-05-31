@@ -25,15 +25,15 @@ class Spritesheet:
         for y in range(16):
             for x in range(16):
                 self.sprites.append(self.get_sprite(x*32,y*32,32,32))
-                print(x,y)
+                (x,y)
                 
 class Background:
     def __init__(self,copias):
-        print('carregando o fundo')
+        ('carregando o fundo')
         self.images = []
         files = (file for file in os.listdir(r'assets\background') if os.path.isfile(os.path.join(r'assets\background', file)))
         for file in files:
-            print('file')
+            ('file')
             path = R'assets\background' + R"\\"
             imagem = pygame.image.load(path + file).convert()
             superficie = pygame.Surface((imagem.get_width()*copias,imagem.get_height())) # Cria uma superfície para copiar a imagem várias vezes
@@ -76,7 +76,7 @@ class TileMap():
         for line in self.tilemap:
             for column in line:
                 if column != '-1':
-                    print(self.spritesheet.sprites)
+                    (self.spritesheet.sprites)
                     self.surface.blit(self.spritesheet.sprites[int(column)],(y*32,x*32))
                     c += 1
                 y += 1
@@ -116,13 +116,6 @@ class TileMap():
             x += 1
             y = 0
             
-class musica:
-    def rodar_musica1():
-
-        pygame.mixer.init() # Iniciar mixer
-        pygame.mixer.music.load("somteste.mp3") # Diretório da música
-        pygame.mixer.music.play(-1) # Play na música (em loop)
-
 if __name__ == '__main__':
     t = TileMap(r'assets\maps\map1.csv')
     t.gettilerects()
