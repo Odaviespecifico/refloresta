@@ -9,13 +9,12 @@ class Game():
         self.running, self.playing = True, False
         self.UP_KEY = self.DOWN_KEY = self.START_KEY = self.BACK_KEY = False
         self.SPACE_KEY = self.E_Key = self.Q_Key = False
-        self.scale = 60
-        self.DISPLAY_W, self.DISPLAY_H = 16*self.scale, 9*self.scale
+        self.DISPLAY_W, self.DISPLAY_H = 960, 540
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.clock = pygame.time.Clock()
-        self.window = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
+        self.window = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
         self.curr_menu = None
         self.jogador = Player()
         self.maplist = ['map_test','map1','map2']
@@ -306,22 +305,72 @@ class Game():
     
     
     def mudarfase(self):
-        if len(self.trash.rects) == 0 and self.treecounter < self.points_to_plant_tree:
+        if len(self.trash.rects) != 0 and self.treecounter < self.points_to_plant_tree:
                 self.times.append([self.mapa,self.time_of_map])
                 self.time_of_map = 0
                 self.mapa += 1
                 
+                tela_vitória = pygame.image.load(r'assets\tela_vitória.png').convert()
+                tela_vitória = pygame.transform.scale(tela_vitória,(self.DISPLAY_W, self.DISPLAY_H))
+                tela_fim = pygame.image.load(r'assets\tela_fim.png').convert()
+                tela_fim = pygame.transform.scale(tela_fim,(self.DISPLAY_W, self.DISPLAY_H))
+                #Stars
+                STAR_X = 610
+                STAR_Y = 354
+                STAR_DISTANCE = 100
+                star_icon = pygame.image.load(r'assets\pixelated_star.png').convert_alpha()
+                star_vector = [star_icon,0]
+                star_list = [star_vector.copy(),star_vector.copy(),star_vector.copy()]
         while len(self.trash.rects) == 0 and self.treecounter < self.points_to_plant_tree:
-            tela_vitória = pygame.image.load(r'assets\tela_vitória.png').convert()
-            tela_vitória = pygame.transform.scale(tela_vitória,(self.DISPLAY_W, self.DISPLAY_H))
-            tela_fim = pygame.image.load(r'assets\tela_fim.png').convert()
-            tela_fim = pygame.transform.scale(tela_fim,(self.DISPLAY_W, self.DISPLAY_H))
+            
+            #Frame limit:
+            self.clock.tick(60)
+            
+            ANIMATION_SPEED = 0.02
             if self.mapa != 3:
                 self.display.blit(tela_vitória,(0,0))
             else:
                 self.display.blit(tela_fim,(0,0))
-            pygame.display.update()
+                
+            #Scale the star by the second value in the vector
+            if star_list[0][1] < 1:
+                star_list[0][1] = min(1,star_list[0][1] + ANIMATION_SPEED)
+                
+                star_list[0][0] = pygame.transform.scale_by(star_icon,star_list[0][1])
+                star_coord = STAR_X - star_list[0][0].get_width()/2 - STAR_DISTANCE,STAR_Y - star_list[0][0].get_height()/2
+                
+                self.display.blit(star_list[0][0],(star_coord))
+                
             
+            
+            if star_list[2][1] < 1 and star_list[0][1] == 1:
+                star_list[2][1] = min(1,star_list[2][1] + ANIMATION_SPEED)
+                star_list[2][0] = pygame.transform.scale_by(star_icon,star_list[2][1])
+                
+                #Blit the first star
+                self.display.blit(star_list[0][0],(star_coord))
+                
+                star2_coord = STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2
+                #Blit the current star
+                self.display.blit(star_list[2][0],(star2_coord))
+                
+            
+            if star_list[2][1] == 1 and star_list[0][1] == 1:
+                star_list[1][1] = min(1,star_list[1][1] + ANIMATION_SPEED)
+                star_list[1][0] = pygame.transform.scale_by(star_icon,star_list[1][1])
+                
+                #Blit the first star
+                self.display.blit(star_list[0][0],(star_coord))
+                self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
+                
+                star3_coord = STAR_X - star_list[1][0].get_width()/2,STAR_Y - star_list[1][0].get_height()/2 - 30
+                
+                #Blit the current star
+                self.display.blit(star_list[1][0],(star3_coord))
+                
+                
+            pygame.display.update()
+                
             self.window.blit(self.display, (0,0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -335,6 +384,20 @@ class Game():
                         else:
                             self.restart_level(self.maplist[self.mapa],0)
                         derrota = False
+                    
+                    # Para mover as estrelas (Centralizar)
+                    if event.key == pygame.K_RIGHT:
+                        STAR_X += 1
+                        print(STAR_X)
+                    if event.key == pygame.K_LEFT:
+                        STAR_X -= 1
+                        print(STAR_X)
+                    if event.key == pygame.K_UP:
+                        STAR_Y -= 1
+                        print(STAR_Y)
+                    if event.key == pygame.K_DOWN:
+                        STAR_Y += 1
+                        print(STAR_Y)
             
                         
                         
