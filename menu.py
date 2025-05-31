@@ -1,6 +1,6 @@
 import pygame
 import sys
-#import game
+# import game
 
 pygame.init()
 
@@ -27,6 +27,7 @@ PRETO = (0, 0, 0)
 FONTE_GRANDE = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 36)
 FONTE_PEQUENA = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
 FONTE_MAIS_QUE_PEQUENA = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 15)
+FONTE_MUITO_MAIS_QUE_PEQUENA = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 10)
 
 # Imagem de fundo
 imagem_fundo = pygame.image.load("assets/background/Menu/Background_Refloresta.png")

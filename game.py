@@ -102,7 +102,7 @@ class Game():
             self.scroll[0] += (self.jogador.rect.x+64 - self.display.get_width() / 2 - self.scroll[0]) / 15
             self.scroll[1] += (self.jogador.rect.y - self.display.get_height() / 2 - self.scroll[1]) / 15
                             
-            #Blit the repeating background
+            #Blit the repeating backgroung
             i = 2 #poisção inicial do background
             for background in self.background.images:
                 self.display.blit(background,((-500)-self.scroll[0]*i/10,0))
@@ -123,9 +123,19 @@ class Game():
             self.trash_verifyandcolect()            
             
             #Show the tree icon
-            if self.treecounter >= 5:
+            if self.treecounter >= self.points_to_plant_tree:
                 self.display.blit(self.treeicon,(self.DISPLAY_W-70,20))
-                   
+
+            # Tree quantity
+            if self.treecounter >= self.points_to_plant_tree * 2:
+                tree_counter_text = FONTE_MUITO_MAIS_QUE_PEQUENA.render(f'{self.treecounter//5}', True, VERDE)
+                xcircle = LARGURA - tree_counter_text.get_width()-10
+                ycircle = 27
+                TELA.blit(tree_counter_text, (xcircle, ycircle))
+                xnum = LARGURA - tree_counter_text.get_width()-6
+                ynum = 32
+                pygame.draw.circle(self.display, PRETO, (xnum,ynum), 12, 30)
+
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
             
