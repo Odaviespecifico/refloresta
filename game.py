@@ -34,7 +34,20 @@ class Game():
         self.clockicon = pygame.image.load('assets\clock.png').convert_alpha()
         self.clockicon = pygame.transform.scale_by(self.clockicon,.8)
         
+        self.joystick = {
+            'a':False,
+            'x':False,
+            'y':False,
+            'b':False,
+            'up':False,
+            'down':False,
+            'left':False,
+            'right':False,
+            'l1':False
+        }
+        
         self.font = pygame.font.Font('assets/fonts/PressStart2P-Regular.ttf', 25)
+        
         pygame.mixer.init() # Inicia a música
         pygame.mixer.music.load("musica.mp3") # Carrega a música
 
@@ -50,8 +63,18 @@ class Game():
         self.time_of_map = 0
         
         #TUtorial
+        #Iniciar o controle:
+        pygame.joystick.init()
+        joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
         while self.tutorial:
             for event in pygame.event.get():
+                #Para o controle
+                if event.type == pygame.JOYBUTTONDOWN:
+                    if event.button == 0:
+                        self.time_of_map = 0 #Reinicia o timer
+                        self.tutorial = False
+                        self.playing = True
+                        break
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         self.time_of_map = 0 #Reinicia o timer
@@ -90,7 +113,7 @@ class Game():
             self.mudarfase()
             
             # Verify and plant tree
-            if self.jogador.arvore and self.Q_Key and self.treecounter >= self.points_to_plant_tree:
+            if self.jogador.arvore and self.Q_Key or self.joystick['y'] and self.treecounter >= self.points_to_plant_tree:
                 self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
                 self.treecounter -= self.points_to_plant_tree
             
@@ -160,7 +183,7 @@ class Game():
             self.display.blit(self.font.render(str(round(self.time_of_map/1000,2)),True,(132,176,103)),(70,19)) #TODO Ajust position
             #Display the clock icon
             self.display.blit(self.clockicon,(20,5))
-            print(self.times)
+            
             #Para fazer o fundo do texto
             try:
                 if textRect.size[0] < self.font.render(str(self.time_of_map/1000),True,(132,176,103)).get_rect().size[0]:
@@ -219,7 +242,6 @@ class Game():
                     case pygame.K_LSHIFT:
                         self.jogador.SHIFT = True
                             
-                        
             if event.type == pygame.KEYUP:
                 match event.key:
                     case pygame.K_LEFT:
@@ -239,13 +261,77 @@ class Game():
                                 pygame.display.toggle_fullscreen()
                                 self.fullscreen = True
                                 break
+            if event.type == pygame.JOYBUTTONDOWN:
+                match event.button:
+                    case 0:
+                        self.joystick['a'] = True
+                        self.jogador.joystick['a'] = True
+                    case 1:
+                        self.joystick['b'] = True
+                        self.jogador.joystick['b'] = True
+                    case 2:
+                        self.joystick['x'] = True
+                        self.jogador.joystick['x'] = True
+                    case 3:
+                        self.jogador.joystick['y'] = True
+                        self.joystick['y'] = True
+                    case 4:
+                        self.joystick['l1'] = True
+            if event.type == pygame.JOYAXISMOTION:
+                if event.axis == 0:
+                    if abs(event.value) < 0.2:
+                        self.jogador.joystick['axis'] = 0
+                        self.jogador.joystick['run'] = False
+                    if event.value > 0.2:
+                        self.jogador.joystick['axis'] = 1
+                    if event.value < -0.2:
+                        self.jogador.joystick['axis'] = -1
+                    if abs(event.value) > 0.7:
+                        self.jogador.joystick['run'] = True
+                        
+            if event.type == pygame.JOYBUTTONUP:
+                match event.button:
+                    case 0:
+                        self.joystick['a'] = False
+                        self.jogador.joystick['a'] = False
+                    case 1:
+                        self.joystick['b'] = False
+                        self.jogador.joystick['b'] = False
+                    case 2:
+                        self.joystick['x'] = False
+                        self.jogador.joystick['x'] = False
+                    case 3:
+                        self.joystick['y'] = False
+                        self.jogador.joystick['y'] = False
+                    
+            if event.type == pygame.JOYHATMOTION:
+                match event.value[0]:
+                    case 1:
+                        self.jogador.joystick['right'] = True
+                        self.jogador.joystick['left'] = False
+                    case -1:
+                        self.jogador.joystick['left'] = True
+                        self.jogador.joystick['right'] = False
+                    case _:
+                        self.jogador.joystick['up'],self.jogador.joystick['down'],self.jogador.joystick['left'],self.jogador.joystick['right'] = False,False,False,False
+            
         key = pygame.key.get_pressed()
         if key[pygame.K_SPACE]:
             self.SPACE_KEY = True
         
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.SPACE_KEY, self.E_Key, self.Q_Key = False, False, False, False, False, False, False
-
+        self.joystick['up'],self.joystick['down'],self.joystick['left'],self.joystick['right'] = False,False,False,False
+        self.joystick['l1'] = False
+        self.joystick['b'] = False
+        self.joystick['y'] = False
+        self.joystick['x'] = False
+        print(self.joystick)
+        self.jogador.joystick['x'] = False
+        self.jogador.joystick['y'] = False
+        self.jogador.joystick['b'] = False
+        
+        
     def trash_verifyandcolect(self):
         global opacidade
         #Renderizar e coletar o lixo
@@ -260,7 +346,7 @@ class Game():
         if phisicsrect.collidelist(self.trash.rects) != -1:
             colidedrect = self.trash.rects[phisicsrect.collidelist(self.trash.rects)]
             # pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32)) #####when colision true, it changes colour from red to blue
-            if self.E_Key:
+            if self.E_Key or self.joystick['l1'] or self.joystick['x']:
                 colideindex = phisicsrect.collidelist(self.trash.rects)
                 self.trash.rects.pop(colideindex)
                 self.trash.trash_sprite.pop(colideindex)
@@ -299,6 +385,12 @@ class Game():
                         self.playing = False
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
+                            self.time_of_map = 0 #Reinicia o timer
+                            self.restart_level(self.maplist[0],1)
+                            derrota = False
+                    
+                    if event.type == pygame.JOYBUTTONDOWN:
+                        if event.button == 0:
                             self.time_of_map = 0 #Reinicia o timer
                             self.restart_level(self.maplist[0],1)
                             derrota = False
@@ -390,7 +482,6 @@ class Game():
                 star3_coord = STAR_X - star_list[1][0].get_width()/2,STAR_Y - star_list[1][0].get_height()/2 - 30
                 
                 #Blit only the two stars
-                print(self.mapa)
                 match self.mapa:
                     case 1:
                         if self.times[0] < 17000:
@@ -418,20 +509,27 @@ class Game():
                         else:
                             self.restart_level(self.maplist[self.mapa],0)
                         derrota = False
-                    
-                    # Para mover as estrelas (Centralizar)
-                    if event.key == pygame.K_RIGHT:
-                        STAR_X += 1
-                        print(STAR_X)
-                    if event.key == pygame.K_LEFT:
-                        STAR_X -= 1
-                        print(STAR_X)
-                    if event.key == pygame.K_UP:
-                        STAR_Y -= 1
-                        print(STAR_Y)
-                    if event.key == pygame.K_DOWN:
-                        STAR_Y += 1
-                        print(STAR_Y)
+                if event.type == pygame.JOYBUTTONDOWN:
+                    if event.button == 0:
+                        if self.mapa == len(self.maplist):
+                            self.playing = False
+                            self.time_of_map = 0
+                            self.treecounter = 30
+                        else:
+                            self.restart_level(self.maplist[self.mapa],0)
+                    # # Para mover as estrelas (Centralizar)
+                    # if event.key == pygame.K_RIGHT:
+                    #     STAR_X += 1
+                    #     print(STAR_X)
+                    # if event.key == pygame.K_LEFT:
+                    #     STAR_X -= 1
+                    #     print(STAR_X)
+                    # if event.key == pygame.K_UP:
+                    #     STAR_Y -= 1
+                    #     print(STAR_Y)
+                    # if event.key == pygame.K_DOWN:
+                    #     STAR_Y += 1
+                    #     print(STAR_Y)
             
                         
                         

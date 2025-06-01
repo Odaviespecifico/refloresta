@@ -20,21 +20,34 @@ class Player(pygame.sprite.Sprite):
         self.velocity_y,self.velocity_x = 0,0
         self.canJump = False
         self.arvore = False
+        
+        self.joystick = {
+            'a':False,
+            'x':False,
+            'y':False,
+            'b':False,
+            'up':False,
+            'down':False,
+            'left':False,
+            'right':False,
+            'axis':0,
+            'run':False
+        }
 
         
     def update(self,jump,tilerects): # Altera a posição, estado e animação do personagem
         self.velocity_x = 0
         self.canJump = False
         self.arvore = False
-        if self.L_Key:
-            if self.SHIFT:
+        if self.L_Key or self.joystick['left'] or self.joystick['axis'] == -1:
+            if self.SHIFT or self.joystick['run']:
                 self.velocity_x = -self.speed * self.speed_mult
                 self.speed_mult = min(1.5, self.speed_mult + 0.1)
             else:
                 self.velocity_x = -self.speed
             self.Flip = True
-        if self.R_Key:
-            if self.SHIFT:
+        if self.R_Key or self.joystick['right'] or self.joystick['axis'] == 1:
+            if self.SHIFT or self.joystick['run']:
                 self.velocity_x = self.speed * self.speed_mult
                 self.speed_mult = min(1.5, self.speed_mult + 0.1)
             else:
@@ -71,7 +84,7 @@ class Player(pygame.sprite.Sprite):
                     self.rect.top = memoryrect.top
                     self.velocity_y = 0
         
-        if jump:
+        if jump or self.joystick['a']:
             if self.canJump:
                 self.velocity_y = -15 -abs(self.velocity_x/5)
         
