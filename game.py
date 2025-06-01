@@ -14,7 +14,8 @@ class Game():
         self.clock = pygame.time.Clock()
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
-        self.window = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
+        self.scaled_W, self.scaled_H = 1280,720
+        self.window = pygame.display.set_mode((1280,720))
         self.curr_menu = None
         self.jogador = Player()
         self.maplist = ['map_test','map1','map2']
@@ -29,7 +30,7 @@ class Game():
         self.treeicon = pygame.image.load(r'assets\tree icon.png').convert_alpha()
         self.treeicon = pygame.transform.scale(self.treeicon,(50,50))
         self.times = []
-        self.Arvores.points_to_plant_tree = 5
+        self.Arvores.points_to_plant_tree = 3
         
         self.clockicon = pygame.image.load('assets\clock.png').convert_alpha()
         self.clockicon = pygame.transform.scale_by(self.clockicon,.8)
@@ -89,8 +90,10 @@ class Game():
             self.tutorial_img = pygame.transform.scale(self.tutorial_img,(self.DISPLAY_W, self.DISPLAY_H))
             self.display.blit(self.tutorial_img,(0,0))
             pygame.display.update()
-            self.window.blit(self.display, (0,0))
+            self.window.blit(pygame.transform.scale(self.display,(1280,720)), (0,0))
             self.time_of_map = 0
+            
+            print(pygame.display.list_modes())
         self.timer = pygame.time.Clock()
         
         
@@ -153,13 +156,13 @@ class Game():
 
             # Tree quantity
             if self.Arvores.treecounter >= self.Arvores.points_to_plant_tree * 2:
-                tree_counter_text = FONTE_MUITO_MAIS_QUE_PEQUENA.render(f'{self.Arvores.treecounter//5}', True, VERDE)
-                xcircle = LARGURA - tree_counter_text.get_width()-10
+                tree_counter_text = FONTE_MUITO_MAIS_QUE_PEQUENA.render(f'{self.Arvores.treecounter//self.Arvores.points_to_plant_tree}', True, VERDE)
+                xcircle = 945 - tree_counter_text.get_width()
                 ycircle = 27
-                TELA.blit(tree_counter_text, (xcircle, ycircle))
-                xnum = LARGURA - tree_counter_text.get_width()-6
-                ynum = 32
+                xnum = 945 - tree_counter_text.get_width()
+                ynum = 28
                 pygame.draw.circle(self.display, PRETO, (xnum,ynum), 12, 30)
+                self.display.blit(tree_counter_text, (xcircle-tree_counter_text.get_width()/2+1, ycircle-tree_counter_text.get_height()/2+2))
 
             #Renderizar o jogador
             self.jogador.draw(self.display,self.scroll)
@@ -199,7 +202,8 @@ class Game():
             self.display.blit(backsurface,(65,15))
             #atualizar a tela
             pygame.display.update()
-            self.window.blit(self.display, (0,0))
+            
+            self.window.blit(pygame.transform.scale(self.display,(1280,720)), (0,0))
             self.reset_keys()
 
 
@@ -380,7 +384,7 @@ class Game():
                 tela_morte = pygame.transform.scale(tela_morte,(self.DISPLAY_W, self.DISPLAY_H))
                 self.display.blit(tela_morte,(0,0))
                 pygame.display.update()
-                self.window.blit(self.display, (0,0))
+                self.window.blit(pygame.transform.scale(self.display,(1280,720)), (0,0))
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         sys.exit()
@@ -409,8 +413,7 @@ class Game():
                 
                 tela_vitória = pygame.image.load(r'assets\tela_vitória.png').convert()
                 tela_vitória = pygame.transform.scale(tela_vitória,(self.DISPLAY_W, self.DISPLAY_H))
-                tela_fim = pygame.image.load(r'assets\tela_fim.png').convert()
-                tela_fim = pygame.transform.scale(tela_fim,(self.DISPLAY_W, self.DISPLAY_H))
+                
                 #Stars
                 STAR_X = 613
                 STAR_Y = 356
@@ -418,16 +421,17 @@ class Game():
                 star_icon = pygame.image.load(r'assets\pixelated_star.png').convert_alpha()
                 star_vector = [star_icon,0]
                 star_list = [star_vector.copy(),star_vector.copy(),star_vector.copy()]
+                
+        #When the player finished the objective
         while len(self.trash.rects) == 0 and self.Arvores.treecounter < self.Arvores.points_to_plant_tree:
             
             #Frame limit:
             self.clock.tick(60)
             
             ANIMATION_SPEED = 0.02
-            if self.mapa != 3:
-                self.display.blit(tela_vitória,(0,0))
-            else:
-                self.display.blit(tela_fim,(0,0))
+            self.display.blit(tela_vitória,(0,0))
+                
+                
                 
             #Scale the star by the second value in the vector
             if star_list[0][1] < 1:
@@ -498,25 +502,24 @@ class Game():
             
             pygame.display.update()
                 
-            self.window.blit(self.display, (0,0))
+            self.window.blit(pygame.transform.scale(self.display,(1280,720)), (0,0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         if self.mapa == len(self.maplist):
+                            self.mostrar_final()
                             self.playing = False
                             self.time_of_map = 0
                             self.Arvores.treecounter = 30
                         else:
                             self.restart_level(self.maplist[self.mapa],0)
-                        derrota = False
                 if event.type == pygame.JOYBUTTONDOWN:
                     if event.button == 0:
                         if self.mapa == len(self.maplist):
-                            self.playing = False
-                            self.time_of_map = 0
-                            self.Arvores.treecounter = 30
+                            self.mostrar_final()
+                            
                         else:
                             self.restart_level(self.maplist[self.mapa],0)
                     # # Para mover as estrelas (Centralizar)
@@ -533,7 +536,26 @@ class Game():
                     #     STAR_Y += 1
                     #     print(STAR_Y)
             
-                        
+
+    def mostrar_final(self):
+        tela_fim = pygame.image.load(r'assets\tela_fim.png').convert()
+        tela_fim = pygame.transform.scale(tela_fim,(self.DISPLAY_W, self.DISPLAY_H))
+        counter = 0
+        while counter < 60 * 7:
+            self.clock.tick(60)
+            self.display.blit(tela_fim,(0,0))
+            self.window.blit(pygame.transform.scale(self.display,(1280,720)), (0,0))
+            counter += 1
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    counter = 300000
+                if event.type == pygame.JOYBUTTONDOWN:
+                    counter = 300000
+        self.playing = False
+        self.time_of_map = 0
+        self.Arvores.treecounter = 30
+        
                         
     def draw_text(self, text, size, x, y, color=None, border=False, border_color=(0, 0, 0)):
         if color is None:

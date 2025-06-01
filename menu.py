@@ -5,7 +5,7 @@ import sys
 pygame.init()
 
 # Dimensões da tela
-LARGURA, ALTURA = 960, 540
+LARGURA, ALTURA = 1280, 720
 TELA = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Refloresta")
 
@@ -80,8 +80,8 @@ def creditos():
     fundo_creditos = pygame.image.load("assets/background/Menu/Background_Refloresta.png").convert()
     fundo_creditos = pygame.transform.scale(fundo_creditos, (LARGURA, ALTURA))
 
-    rect_fundo = pygame.Surface((700, 300), pygame.SRCALPHA)
-    pygame.draw.rect(rect_fundo, ((0,0,0,180)), (0,0, 700, 300), border_radius=10)
+    rect_fundo = pygame.Surface((700,300), pygame.SRCALPHA)
+    pygame.draw.rect(rect_fundo, ((0,0,0,180)),(0,0, 700, 300), border_radius=10)
 
     while rodando:
         for evento in pygame.event.get():
@@ -95,7 +95,7 @@ def creditos():
         
 
         TELA.blit(fundo_creditos, (0, 0))
-        TELA.blit(rect_fundo, (LARGURA - 830, 120))
+        TELA.blit(rect_fundo, (LARGURA - 990, 120))
 
         desenhar_texto_com_borda("AGRADECIMENTOS", FONTE_GRANDE, BRANCO, PRETO, LARGURA//2, 100 - 30, TELA)
         #titulo_rect = titulo.get_rect(center=(LARGURA//2, 100 - 30))
