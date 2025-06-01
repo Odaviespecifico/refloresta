@@ -83,7 +83,6 @@ class Player(pygame.sprite.Sprite):
             if self.velocity_y < 0:
                     self.rect.top = memoryrect.top
                     self.velocity_y = 0
-        print(self.arvore)
         if jump or self.joystick['a']:
             if self.canJump:
                 self.velocity_y = -15 -abs(self.velocity_x/5)
