@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "map4.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -13,12 +13,14 @@
             "scale": 0.25,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -26,
-                "y": 1346
+                "x": 256,
+                "y": 510
             }
         },
         "TX Tileset Ground.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
         },
         "TileSet.tsx": {
             "dynamicWrapping": true,
@@ -34,6 +36,11 @@
             "dynamicWrapping": true,
             "scaleInDock": 1
         },
+        "Tileset - Village.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "Village.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
@@ -47,11 +54,11 @@
             }
         },
         "map1.tmx": {
-            "scale": 1,
+            "scale": 0.25,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 2662.5,
-                "y": 390.5
+                "x": 1410,
+                "y": 1442
             }
         },
         "map2.tmx": {
@@ -60,6 +67,22 @@
             "viewCenter": {
                 "x": 2085.6666666666665,
                 "y": 1.6666666666666288
+            }
+        },
+        "map3.tmx": {
+            "scale": 0.0625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2312,
+                "y": -1240
+            }
+        },
+        "map4.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2724,
+                "y": 1028
             }
         },
         "noncollide.tmx": {
@@ -73,19 +96,28 @@
     },
     "last.exportedFilePath": "C:/Users/Davi/Documents/Progamação/refloresta/assets/maps",
     "last.externalTilesetPath": "C:/Users/Davi/Documents/Progamação/refloresta/tiled",
-    "last.imagePath": "C:/Users/Davi/Downloads/Pixel Art Platformer - Village Props v2.3.0/Texture",
+    "last.imagePath": "C:/Users/Davi/Documents/Progamação/refloresta/assets/Tiles/tilesets",
     "map.fixedSize": false,
     "map.lastUsedExportFilter": "Arquivos CSV (*.csv)",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
-        "Mainmap.tmx"
+        "Mainmap.tmx",
+        "map3.tmx",
+        "map4.tmx",
+        "TX Tileset Ground.tsx",
+        "Tileset - Village.tsx",
+        "map1.tmx"
     ],
     "project": "game_maps.tiled-project",
     "recentFiles": [
         "Mainmap.tmx",
+        "map3.tmx",
+        "map1.tmx",
+        "Tileset - Village.tsx",
+        "TX Tileset Ground.tsx",
+        "map4.tmx",
         "noncollide.tmx",
         "TileSetNew.tsx",
-        "map1.tmx",
         "Village.tsx",
         "TileSet.tsx"
     ],
