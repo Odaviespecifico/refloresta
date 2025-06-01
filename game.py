@@ -402,13 +402,13 @@ class Game():
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
                             self.time_of_map = 0 #Reinicia o timer
-                            self.restart_level(self.maplist[0],1)
+                            self.restart_level(self.maplist[self.mapa], 0)
                             derrota = False
                     
                     if event.type == pygame.JOYBUTTONDOWN:
                         if event.button == 0:
                             self.time_of_map = 0 #Reinicia o timer
-                            self.restart_level(self.maplist[0],1)
+                            self.restart_level(self.maplist[self.mapa], 0)
                             derrota = False
     
     
