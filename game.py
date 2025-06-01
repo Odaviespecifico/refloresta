@@ -63,7 +63,13 @@ class Game():
         self.trash = Trash(self.map.toprectlist)
         pontuação_maxima = len(self.trash.trash_sprite)
         self.time_of_map = 0
-        
+        self.tutorial_imgs = [
+        pygame.transform.scale(pygame.image.load("tutorial.png"), (self.DISPLAY_W, self.DISPLAY_H)),
+        pygame.transform.scale(pygame.image.load("tutorial2.png"), (self.DISPLAY_W, self.DISPLAY_H)),
+        pygame.transform.scale(pygame.image.load("tutorial3.png"), (self.DISPLAY_W, self.DISPLAY_H))
+    ]   #lista de todas as imagens do tutorial
+        self.current_tutorial_index = 0 #variável para contar a soma do index da lista 
+
         #TUtorial
         #Iniciar o controle:
         pygame.joystick.init()
@@ -74,24 +80,28 @@ class Game():
                 #Para o controle
                 if event.type == pygame.JOYBUTTONDOWN:
                     if event.button == 0 and tutorial == False:
-                        self.time_of_map = 0 #Reinicia o timer
+                        self.current_tutorial_index += 1
+                    if self.current_tutorial_index >= len(self.tutorial_imgs):
                         self.tutorial = False
                         self.playing = True
                         break
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        self.time_of_map = 0 #Reinicia o timer
-                        self.tutorial = False
-                        self.playing = True
-                        break
+                        self.current_tutorial_index += 1
+                        if self.current_tutorial_index >= len(self.tutorial_imgs):
+                            self.tutorial = False
+                            self.playing = True
+                            break
                 if event.type == pygame.QUIT:
                     sys.exit()
+
             tutorial = False #Para reiniciar o tutorial
-            self.tutorial_img = pygame.image.load("tutorial.png")
-            self.tutorial_img = pygame.transform.scale(self.tutorial_img,(self.DISPLAY_W, self.DISPLAY_H))
-            self.display.blit(self.tutorial_img,(0,0))
+            if self.current_tutorial_index >= 3:
+                break
+            else:
+                self.display.blit(self.tutorial_imgs[self.current_tutorial_index], (0, 0)) #gera a imagem de acordo com o index
             pygame.display.update()
-            self.window.blit(pygame.transform.scale(self.display,(1280,720)), (0,0))
+            self.window.blit(pygame.transform.scale(self.display, (1280, 720)), (0, 0))
             self.time_of_map = 0
             
         self.timer = pygame.time.Clock()
