@@ -1,13 +1,15 @@
 import pygame
 import sys
+from utils import Spritesheet
 # import game
-
-pygame.init()
-
-# Dimensões da tela
-LARGURA, ALTURA = 1280, 720
-TELA = pygame.display.set_mode((LARGURA, ALTURA))
-pygame.display.set_caption("Refloresta")
+if not pygame.display.get_init():
+    pygame.init()
+    # Dimensões da tela
+    LARGURA, ALTURA = 1280, 720
+    print(pygame.display.get_init())
+    if pygame.display.get_init():
+        TELA = pygame.display.set_mode((LARGURA, ALTURA))
+        pygame.display.set_caption("Refloresta")
 
 
 # Cores
@@ -125,14 +127,26 @@ def creditos():
 
 
 def tela_inicial():
-    global escolha
+    global som,escolha
     botao_iniciar = Botao(LARGURA//2 - 100, ALTURA//2, 200, 50, "Iniciar", VERDE, VERDE_ESCURO)
     botao_sair = Botao(LARGURA//2 - 100, ALTURA//2 + 140, 200, 50, "Sair", VERMELHO, VERMELHO_ESCURO)
     botao_creditos = Botao(LARGURA//2 - 100, ALTURA//2 + 70, 200, 50, "Créditos", VERDE, VERDE_ESCURO)
     pygame.joystick.init()
     joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-    
+    icones_som = [pygame.image.load(r'assets\Sound icons\01.png').convert_alpha(),
+                  pygame.image.load(r'assets\Sound icons\02.png').convert_alpha(),
+                  pygame.image.load(r'assets\Sound icons\03.png').convert_alpha(),
+                  pygame.image.load(r'assets\Sound icons\04.png').convert_alpha()]
+    for i in range(len(icones_som)):
+        icones_som[i] = pygame.transform.scale_by(icones_som[i],0.25)
+        icones_som[i].set_alpha(150)
+        
+    som = 0
+    pygame.mixer.init() # Inicia a música
+    pygame.mixer.music.load("musica.mp3") # Carrega a música
+    pygame.mixer.music.play(-1) # Música em loop
     while True:
+        print(som)
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
@@ -148,6 +162,9 @@ def tela_inicial():
                     if escolha == 3:
                         pygame.quit()
                         sys.exit()
+                    if escolha == 4:
+                        som = (som + 1) % 4
+                        
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_RETURN or evento.key == pygame.K_SPACE:
                     if escolha == 1:
@@ -159,23 +176,38 @@ def tela_inicial():
                     if escolha == 3:
                         pygame.quit()
                         sys.exit()
+                    if escolha == 4:
+                        som = (som + 1) % 4
+                        
             if evento.type == pygame.JOYHATMOTION:
                 if evento.value[1] == 1:
-                    escolha = (escolha - 1) % 4
+                    escolha = (escolha - 1) % 5
                     print(escolha)
                 if evento.value[1] == -1:
-                    escolha = (escolha + 1) % 4
+                    escolha = (escolha + 1) % 5
                     print(escolha)
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_DOWN:
-                    escolha = (escolha + 1) % 4
+                    escolha = (escolha + 1) % 5
                 if evento.key == pygame.K_UP:
-                    escolha = (escolha - 1) % 4
+                    escolha = (escolha - 1) % 5
+        
+        match som:
+            case 0:
+                pygame.mixer.music.set_volume(0.7)
+            case 1:
+                pygame.mixer.music.set_volume(0.4)
+            case 2:
+                pygame.mixer.music.set_volume(0.1)
+            case 3:
+                pygame.mixer.music.set_volume(0)
         match escolha:
             case 0:
                 botao_iniciar.cor_atual = VERDE
                 botao_creditos.cor_atual = VERDE
                 botao_sair.cor_atual = VERMELHO
+                for i in range(len(icones_som)):
+                    icones_som[i].set_alpha(150)
             case 1:
                 botao_iniciar.cor_atual = VERDE_ESCURO
                 botao_creditos.cor_atual = VERDE
@@ -188,8 +220,15 @@ def tela_inicial():
                 botao_iniciar.cor_atual = VERDE
                 botao_creditos.cor_atual = VERDE
                 botao_sair.cor_atual = VERMELHO_ESCURO
+                for i in range(len(icones_som)):
+                    icones_som[i].set_alpha(150)
+            case 4:
+                botao_iniciar.cor_atual = VERDE
+                botao_creditos.cor_atual = VERDE
+                botao_sair.cor_atual = VERMELHO
+                for i in range(len(icones_som)):
+                    icones_som[i].set_alpha(255)
         
-
         # Fundo com imagem
         TELA.blit(imagem_fundo, (0, 0))
         
@@ -204,6 +243,7 @@ def tela_inicial():
         botao_sair.desenhar(TELA)
         botao_creditos.desenhar(TELA)
 
+        TELA.blit(icones_som[som],(LARGURA - 150,ALTURA - 120))
         pygame.display.flip()
         pygame.time.Clock().tick(60)
 game_playing = False

@@ -5,6 +5,8 @@ from utils import Background, TileMap
 
 class Game():
     def __init__(self):
+        global som
+        som = 2
         pygame.init()
         self.running, self.playing = True, False
         self.UP_KEY = self.DOWN_KEY = self.START_KEY = self.BACK_KEY = False
@@ -50,8 +52,7 @@ class Game():
         
         self.font = pygame.font.Font('assets/fonts/PressStart2P-Regular.ttf', 25)
         
-        pygame.mixer.init() # Inicia a música
-        pygame.mixer.music.load("musica.mp3") # Carrega a música
+        
 
     def game_loop(self):
         global loop_start,opacidade, pontuação_maxima
@@ -109,10 +110,12 @@ class Game():
         
         #Main loop of the game
         while self.playing:
+            print(som)
             #Play the music of the game
             if not self.music_playing:
                 try:
-                    pygame.mixer.music.play(-1) # Música em loop
+                    
+                            
                     self.music_playing = True # Coloca pra tocar a música
                 except pygame.error as erro:
                     print(f"Erro ao produzir a música: {erro}")
@@ -413,7 +416,6 @@ class Game():
     
     
     def mudarfase(self):
-        print(self.times)
         if len(self.trash.rects) == 0 and self.Arvores.treecounter < self.Arvores.points_to_plant_tree:
                 try:
                     self.times[self.mapa] = self.time_of_map
