@@ -66,11 +66,12 @@ class Game():
         #Iniciar o controle:
         pygame.joystick.init()
         joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+        tutorial = True #Para reiniciar o tutorial
         while self.tutorial:
             for event in pygame.event.get():
                 #Para o controle
                 if event.type == pygame.JOYBUTTONDOWN:
-                    if event.button == 0:
+                    if event.button == 0 and tutorial == False:
                         self.time_of_map = 0 #Reinicia o timer
                         self.tutorial = False
                         self.playing = True
@@ -83,6 +84,7 @@ class Game():
                         break
                 if event.type == pygame.QUIT:
                     sys.exit()
+            tutorial = False #Para reiniciar o tutorial
             self.tutorial_img = pygame.image.load("tutorial.png")
             self.tutorial_img = pygame.transform.scale(self.tutorial_img,(self.DISPLAY_W, self.DISPLAY_H))
             self.display.blit(self.tutorial_img,(0,0))
