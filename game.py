@@ -115,8 +115,9 @@ class Game():
             self.mudarfase()
             
             # Verify and plant tree
-            if self.jogador.arvore and self.Q_Key or self.joystick['y'] and self.Arvores.treecounter >= self.Arvores.points_to_plant_tree:
-                self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
+            if self.jogador.arvore:
+                if self.Q_Key or self.joystick['y'] and self.Arvores.treecounter >= self.Arvores.points_to_plant_tree:
+                    self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
                 
             
             # Preenche a tela com Fill the display with a random color
