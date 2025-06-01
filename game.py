@@ -25,11 +25,11 @@ class Game():
         self.music_playing = False
         self.mapa = 0
         self.background = Background(5)
-        self.treecounter = 0
+        self.Arvores.treecounter = 0
         self.treeicon = pygame.image.load(r'assets\tree icon.png').convert_alpha()
         self.treeicon = pygame.transform.scale(self.treeicon,(50,50))
         self.times = []
-        self.points_to_plant_tree = 5
+        self.Arvores.points_to_plant_tree = 5
         
         self.clockicon = pygame.image.load('assets\clock.png').convert_alpha()
         self.clockicon = pygame.transform.scale_by(self.clockicon,.8)
@@ -115,9 +115,9 @@ class Game():
             self.mudarfase()
             
             # Verify and plant tree
-            if self.jogador.arvore and self.Q_Key or self.joystick['y'] and self.treecounter >= self.points_to_plant_tree:
+            if self.jogador.arvore and self.Q_Key or self.joystick['y'] and self.Arvores.treecounter >= self.Arvores.points_to_plant_tree:
                 self.Arvores.add_tree(self.jogador.rect.x, self.jogador.rect.y, self.map.rectlist)
-                self.treecounter -= self.points_to_plant_tree
+                
             
             # Preenche a tela com Fill the display with a random color
             self.display.fill((45, 142, 193))
@@ -147,12 +147,12 @@ class Game():
             self.trash_verifyandcolect()            
             
             #Show the tree icon
-            if self.treecounter >= self.points_to_plant_tree:
+            if self.Arvores.treecounter >= self.Arvores.points_to_plant_tree:
                 self.display.blit(self.treeicon,(self.DISPLAY_W-70,20))
 
             # Tree quantity
-            if self.treecounter >= self.points_to_plant_tree * 2:
-                tree_counter_text = FONTE_MUITO_MAIS_QUE_PEQUENA.render(f'{self.treecounter//5}', True, VERDE)
+            if self.Arvores.treecounter >= self.Arvores.points_to_plant_tree * 2:
+                tree_counter_text = FONTE_MUITO_MAIS_QUE_PEQUENA.render(f'{self.Arvores.treecounter//5}', True, VERDE)
                 xcircle = LARGURA - tree_counter_text.get_width()-10
                 ycircle = 27
                 TELA.blit(tree_counter_text, (xcircle, ycircle))
@@ -211,7 +211,7 @@ class Game():
         self.jogador = Player()
         self.pontuação = 0
         self.Arvores = Arvores()
-        self.treecounter = False
+        self.Arvores.treecounter = False
         loop_start = True
         self.time_of_map = 0
         if state == 1:
@@ -328,7 +328,6 @@ class Game():
         self.joystick['b'] = False
         self.joystick['y'] = False
         self.joystick['x'] = False
-        print(self.joystick)
         self.jogador.joystick['x'] = False
         self.jogador.joystick['y'] = False
         self.jogador.joystick['b'] = False
@@ -353,7 +352,7 @@ class Game():
                 self.trash.rects.pop(colideindex)
                 self.trash.trash_sprite.pop(colideindex)
                 self.pontuação += 1
-                self.treecounter += 1
+                self.Arvores.treecounter += 1
                 opacidade = min(60,opacidade + 3)
         
     def barraPontuação(self):
@@ -399,7 +398,7 @@ class Game():
     
     
     def mudarfase(self):
-        if len(self.trash.rects) == 0 and self.treecounter < self.points_to_plant_tree:
+        if len(self.trash.rects) == 0 and self.Arvores.treecounter < self.Arvores.points_to_plant_tree:
                 try:
                     self.times[self.mapa] = self.time_of_map
                 except IndexError:
@@ -418,7 +417,7 @@ class Game():
                 star_icon = pygame.image.load(r'assets\pixelated_star.png').convert_alpha()
                 star_vector = [star_icon,0]
                 star_list = [star_vector.copy(),star_vector.copy(),star_vector.copy()]
-        while len(self.trash.rects) == 0 and self.treecounter < self.points_to_plant_tree:
+        while len(self.trash.rects) == 0 and self.Arvores.treecounter < self.Arvores.points_to_plant_tree:
             
             #Frame limit:
             self.clock.tick(60)
@@ -507,7 +506,7 @@ class Game():
                         if self.mapa == len(self.maplist):
                             self.playing = False
                             self.time_of_map = 0
-                            self.treecounter = 30
+                            self.Arvores.treecounter = 30
                         else:
                             self.restart_level(self.maplist[self.mapa],0)
                         derrota = False
@@ -516,7 +515,7 @@ class Game():
                         if self.mapa == len(self.maplist):
                             self.playing = False
                             self.time_of_map = 0
-                            self.treecounter = 30
+                            self.Arvores.treecounter = 30
                         else:
                             self.restart_level(self.maplist[self.mapa],0)
                     # # Para mover as estrelas (Centralizar)

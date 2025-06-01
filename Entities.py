@@ -193,6 +193,8 @@ class Arvores():
         self.frame_counter = 0
         self.counter = 0
         self.manytrees = []
+        self.points_to_plant_tree = 5
+        self.treecounter = 0
         tree_name = 'ipê roxa'
         for name in ['ipê roxa', 'ipê amarela', 'Growing Tree']:
             if name == 'Growing Tree':
@@ -219,10 +221,12 @@ class Arvores():
 
         # Verifica se já tem árvore ali
         if str((tile_x, tile_y)) in self.tree_dict:
+            print('já tenho árvore aqui')
             return
         # Se passou nas verificações, adiciona a árvore
         self.tree_list.append([tile_x, tile_y, 0,0,random.randint(0,2)])
         self.tree_dict[str((tile_x, tile_y))] = 1
+        self.treecounter -= self.points_to_plant_tree
 
     # def draw_trees(self, screen: pygame.Surface, offset):
     #     self.frame_counter += 1
