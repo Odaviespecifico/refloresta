@@ -18,7 +18,7 @@ class Game():
         self.window = pygame.display.set_mode((1280,720))
         self.curr_menu = None
         self.jogador = Player()
-        self.maplist = ['map_test','map1','map2']
+        self.maplist = ['map1','map_test','map2','map3','map4']
         self.map = TileMap(fr'assets\maps\{self.maplist[0]}.csv')
         self.pontuação = 0
         self.fullscreen = False
