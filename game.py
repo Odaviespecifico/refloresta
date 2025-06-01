@@ -462,7 +462,13 @@ class Game():
                         if self.times[0] < 18000:
                             self.display.blit(star_list[2][0],(star2_coord))
                     case 3:
-                        if self.times[0] < 23000:
+                        if self.times[0] < 25000:
+                            self.display.blit(star_list[2][0],(star2_coord))
+                    case 4:
+                        if self.times[0] < 24000:
+                            self.display.blit(star_list[2][0],(star2_coord))
+                    case 3:
+                        if self.times[0] < 26000:
                             self.display.blit(star_list[2][0],(star2_coord))
                 
             
@@ -484,6 +490,12 @@ class Game():
                             self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
                     case 3:
                         if self.times[0] < 23000:
+                            self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
+                    case 4:
+                        if self.times[0] < 21000:
+                            self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
+                    case 5:
+                        if self.times[0] < 22000:
                             self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
                 star3_coord = STAR_X - star_list[1][0].get_width()/2,STAR_Y - star_list[1][0].get_height()/2 - 30
                 
