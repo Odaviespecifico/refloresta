@@ -305,8 +305,11 @@ class Game():
     
     
     def mudarfase(self):
-        if len(self.trash.rects) != 0 and self.treecounter < self.points_to_plant_tree:
-                self.times.append([self.mapa,self.time_of_map])
+        if len(self.trash.rects) == 0 and self.treecounter < self.points_to_plant_tree:
+                try:
+                    self.times[self.mapa] = self.time_of_map
+                except IndexError:
+                    self.times.append(self.time_of_map)
                 self.time_of_map = 0
                 self.mapa += 1
                 
@@ -315,8 +318,8 @@ class Game():
                 tela_fim = pygame.image.load(r'assets\tela_fim.png').convert()
                 tela_fim = pygame.transform.scale(tela_fim,(self.DISPLAY_W, self.DISPLAY_H))
                 #Stars
-                STAR_X = 610
-                STAR_Y = 354
+                STAR_X = 613
+                STAR_Y = 356
                 STAR_DISTANCE = 100
                 star_icon = pygame.image.load(r'assets\pixelated_star.png').convert_alpha()
                 star_vector = [star_icon,0]
@@ -342,7 +345,7 @@ class Game():
                 self.display.blit(star_list[0][0],(star_coord))
                 
             
-            
+            #Third star
             if star_list[2][1] < 1 and star_list[0][1] == 1:
                 star_list[2][1] = min(1,star_list[2][1] + ANIMATION_SPEED)
                 star_list[2][0] = pygame.transform.scale_by(star_icon,star_list[2][1])
@@ -351,8 +354,18 @@ class Game():
                 self.display.blit(star_list[0][0],(star_coord))
                 
                 star2_coord = STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2
+                
                 #Blit the current star
-                self.display.blit(star_list[2][0],(star2_coord))
+                match self.mapa:
+                    case 1:
+                        if self.times[0] < 20000:
+                            self.display.blit(star_list[2][0],(star2_coord))
+                    case 2:
+                        if self.times[0] < 18000:
+                            self.display.blit(star_list[2][0],(star2_coord))
+                    case 3:
+                        if self.times[0] < 23000:
+                            self.display.blit(star_list[2][0],(star2_coord))
                 
             
             if star_list[2][1] == 1 and star_list[0][1] == 1:
@@ -361,14 +374,35 @@ class Game():
                 
                 #Blit the first star
                 self.display.blit(star_list[0][0],(star_coord))
-                self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
-                
+                                
+                                
+                #Blit the second star:
+                match self.mapa:
+                    case 1:
+                        if self.times[0] < 20000:
+                            self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
+                    case 2:
+                        if self.times[0] < 18000:
+                            self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
+                    case 3:
+                        if self.times[0] < 23000:
+                            self.display.blit(star_list[2][0],(STAR_X - star_list[2][0].get_width()/2 + STAR_DISTANCE,STAR_Y - star_list[2][0].get_height()/2))
                 star3_coord = STAR_X - star_list[1][0].get_width()/2,STAR_Y - star_list[1][0].get_height()/2 - 30
                 
-                #Blit the current star
-                self.display.blit(star_list[1][0],(star3_coord))
+                #Blit only the two stars
+                print(self.mapa)
+                match self.mapa:
+                    case 1:
+                        if self.times[0] < 17000:
+                            self.display.blit(star_list[1][0],(star3_coord))
+                    case 2:
+                        if self.times[0] < 15000:
+                            self.display.blit(star_list[1][0],(star3_coord))
+                    case 3:
+                        if self.times[0] < 20000:
+                            self.display.blit(star_list[1][0],(star3_coord))
                 
-                
+            
             pygame.display.update()
                 
             self.window.blit(self.display, (0,0))

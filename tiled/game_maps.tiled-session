@@ -13,7 +13,7 @@
             "scale": 0.25,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -938,
+                "x": -26,
                 "y": 1346
             }
         },
@@ -59,7 +59,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 2085.6666666666665,
-                "y": -86.33333333333337
+                "y": 1.6666666666666288
             }
         },
         "noncollide.tmx": {
