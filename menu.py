@@ -147,7 +147,7 @@ def tela_inicial():
     except:
         som = 0
         pygame.mixer.init() # Inicia a música
-        pygame.mixer.music.load("musica.mp3") # Carrega a música
+        pygame.mixer.music.load(r'assets\musica.mp3') # Carrega a música
         pygame.mixer.music.play(-1) # Música em loop
     while True:
         print(som)

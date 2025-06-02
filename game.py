@@ -12,6 +12,7 @@ class Game():
         self.UP_KEY = self.DOWN_KEY = self.START_KEY = self.BACK_KEY = False
         self.SPACE_KEY = self.E_Key = self.Q_Key = False
         self.DISPLAY_W, self.DISPLAY_H = 960, 540
+        pygame.display.set_icon(pygame.image.load(r'assets\ReFloresta.png'))
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.clock = pygame.time.Clock()
         self.font_name = pygame.font.get_default_font()
@@ -66,9 +67,9 @@ class Game():
         pontuação_maxima = len(self.trash.trash_sprite)
         self.time_of_map = 0
         self.tutorial_imgs = [
-        pygame.transform.scale(pygame.image.load("tutorial.png"), (self.DISPLAY_W, self.DISPLAY_H)),
-        pygame.transform.scale(pygame.image.load("tutorial2.png"), (self.DISPLAY_W, self.DISPLAY_H)),
-        pygame.transform.scale(pygame.image.load("tutorial3.png"), (self.DISPLAY_W, self.DISPLAY_H))
+        pygame.transform.scale(pygame.image.load(r"assets\tutorial.png"), (self.DISPLAY_W, self.DISPLAY_H)),
+        pygame.transform.scale(pygame.image.load(r"assets\tutorial2.png"), (self.DISPLAY_W, self.DISPLAY_H)),
+        pygame.transform.scale(pygame.image.load(r"assets\tutorial3.png"), (self.DISPLAY_W, self.DISPLAY_H))
     ]   #lista de todas as imagens do tutorial
         self.current_tutorial_index = 0 #variável para contar a soma do index da lista 
 
