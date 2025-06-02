@@ -141,10 +141,14 @@ def tela_inicial():
         icones_som[i] = pygame.transform.scale_by(icones_som[i],0.25)
         icones_som[i].set_alpha(150)
         
-    som = 0
-    pygame.mixer.init() # Inicia a música
-    pygame.mixer.music.load("musica.mp3") # Carrega a música
-    pygame.mixer.music.play(-1) # Música em loop
+    try:
+        if som == 0:
+            som = 0
+    except:
+        som = 0
+        pygame.mixer.init() # Inicia a música
+        pygame.mixer.music.load("musica.mp3") # Carrega a música
+        pygame.mixer.music.play(-1) # Música em loop
     while True:
         print(som)
         for evento in pygame.event.get():

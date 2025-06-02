@@ -34,7 +34,8 @@ class Game():
         self.treeicon = pygame.transform.scale(self.treeicon,(50,50))
         self.times = []
         self.Arvores.points_to_plant_tree = 3
-        
+        self.cheat = [0,0]
+        self.trapaça = False
         self.clockicon = pygame.image.load('assets\clock.png').convert_alpha()
         self.clockicon = pygame.transform.scale_by(self.clockicon,.8)
         
@@ -110,7 +111,6 @@ class Game():
         
         #Main loop of the game
         while self.playing:
-            print(som)
             #Play the music of the game
             if not self.music_playing:
                 try:
@@ -308,6 +308,13 @@ class Game():
                         self.jogador.joystick['axis'] = -1
                     if abs(event.value) > 0.7:
                         self.jogador.joystick['run'] = True
+                if event.axis == 4:
+                    if event.value == 1:
+                        print('apertou tudo esquerda')
+                        self.cheat[0] = 1
+                if event.axis == 5:
+                    if event.value == 1:
+                        self.cheat[1] = 1
                         
             if event.type == pygame.JOYBUTTONUP:
                 match event.button:
@@ -323,7 +330,6 @@ class Game():
                     case 3:
                         self.joystick['y'] = False
                         self.jogador.joystick['y'] = False
-                    
             if event.type == pygame.JOYHATMOTION:
                 match event.value[0]:
                     case 1:
@@ -335,6 +341,11 @@ class Game():
                     case _:
                         self.jogador.joystick['up'],self.jogador.joystick['down'],self.jogador.joystick['left'],self.jogador.joystick['right'] = False,False,False,False
             
+            #Para trapacear no jogo:
+            if self.cheat == [1,1]:
+                self.trapaça = True if self.trapaça == False else False
+                self.cheat = [0,0]
+            print(self.trapaça)
         key = pygame.key.get_pressed()
         if key[pygame.K_SPACE]:
             self.SPACE_KEY = True
@@ -405,13 +416,20 @@ class Game():
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
                             self.time_of_map = 0 #Reinicia o timer
-                            self.restart_level(self.maplist[0],1)
+                            if self.trapaça == True:
+                                self.restart_level(self.maplist[self.mapa],1)
+                            else:
+                                self.restart_level(self.maplist[0],1)
                             derrota = False
                     
                     if event.type == pygame.JOYBUTTONDOWN:
                         if event.button == 0:
                             self.time_of_map = 0 #Reinicia o timer
-                            self.restart_level(self.maplist[0],1)
+                            # self.restart_level(self.maplist[0],1)
+                            if self.trapaça == True:
+                                self.restart_level(self.maplist[self.mapa],1)
+                            else:
+                                self.restart_level(self.maplist[0],1)
                             derrota = False
     
     
