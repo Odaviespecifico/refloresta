@@ -374,7 +374,6 @@ class Game():
         else:
             phisicsrect = pygame.Rect(self.jogador.rect[0]+45,self.jogador.rect[1],60,70)
         if phisicsrect.collidelist(self.trash.rects) != -1:
-            colidedrect = self.trash.rects[phisicsrect.collidelist(self.trash.rects)]
             # pygame.draw.rect(self.display,(0,0,255),(colidedrect[0]-self.scroll[0],colidedrect[1]-self.scroll[1],32,32)) #####when colision true, it changes colour from red to blue
             if self.E_Key or self.joystick['l1'] or self.joystick['x']:
                 colideindex = phisicsrect.collidelist(self.trash.rects)
