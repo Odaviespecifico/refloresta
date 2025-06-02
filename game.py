@@ -20,8 +20,8 @@ class Game():
         self.window = pygame.display.set_mode((1280,720))
         self.curr_menu = None
         self.jogador = Player()
-        self.maplist = ['map1','map_test','map2','map3','map4']
-        self.startimes = [[15000,17000,15000,18000,17000],[19000,21000,19000,22000,21000]]
+        self.maplist = ['map1','map_test','map2','map3','map4','map5']
+        self.startimes = [[15000,17000,15000,18000,17000,20000],[19000,21000,19000,22000,21000,23000]]
         self.map = TileMap(fr'assets\maps\{self.maplist[0]}.csv')
         self.pontuação = 0
         self.fullscreen = False
@@ -214,6 +214,8 @@ class Game():
             backsurface.set_alpha(60)
             self.display.blit(backsurface,(65,15))
             #atualizar a tela
+            if self.trapaça:
+                pygame.draw.circle(self.display,(255,0,0),(50,self.DISPLAY_H-50),10)
             pygame.display.update()
             
             self.window.blit(pygame.transform.scale(self.display,(1280,720)), (0,0))
@@ -310,7 +312,6 @@ class Game():
                         self.jogador.joystick['run'] = True
                 if event.axis == 4:
                     if event.value == 1:
-                        print('apertou tudo esquerda')
                         self.cheat[0] = 1
                 if event.axis == 5:
                     if event.value == 1:
@@ -345,7 +346,6 @@ class Game():
             if self.cheat == [1,1]:
                 self.trapaça = True if self.trapaça == False else False
                 self.cheat = [0,0]
-            print(self.trapaça)
         key = pygame.key.get_pressed()
         if key[pygame.K_SPACE]:
             self.SPACE_KEY = True
@@ -417,7 +417,7 @@ class Game():
                         if event.key == pygame.K_RETURN:
                             self.time_of_map = 0 #Reinicia o timer
                             if self.trapaça == True:
-                                self.restart_level(self.maplist[self.mapa],1)
+                                self.restart_level(self.maplist[self.mapa])
                             else:
                                 self.restart_level(self.maplist[0],1)
                             derrota = False
@@ -427,7 +427,7 @@ class Game():
                             self.time_of_map = 0 #Reinicia o timer
                             # self.restart_level(self.maplist[0],1)
                             if self.trapaça == True:
-                                self.restart_level(self.maplist[self.mapa],1)
+                                self.restart_level(self.maplist[self.mapa])
                             else:
                                 self.restart_level(self.maplist[0],1)
                             derrota = False
