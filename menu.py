@@ -182,6 +182,8 @@ def tela_inicial():
                         sys.exit()
                     if escolha == 4:
                         som = (som + 1) % 4
+                if evento.key == pygame.K_f:
+                    pygame.display.toggle_fullscreen()
                         
             if evento.type == pygame.JOYHATMOTION:
                 if evento.value[1] == 1:
