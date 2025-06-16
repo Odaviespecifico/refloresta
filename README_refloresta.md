@@ -30,8 +30,8 @@ O *ReFloresta* é um jogo 2D desenvolvido em PyGame, onde o jogador:
 ---
 
 ## 🎮 Funcionalidades
-- 🧃*Sistema de Coleta*: Use a tecla E para recolher resíduos espalhados.
-- 🌳*Plantio de Árvores*: Tecla Q para plantar (crescimento progressivo).
+- 🧃 *Sistema de Coleta*: Ação para recolher resíduos e limpar o ambiente.
+- 🌳 *Plantio de Árvores*: Restaura áreas degradadas ao plantar mudas.
 - ⏱️ *Cronômetro*: O cronômetro inicia no começo de cada fase, e é usado para pontuação.
 - ⚡ *Nota de performance*: Quanto mais rápido completar a fase, maior será a sua nota (até 3 estrelas ⭐⭐⭐).
 - 🕹️ *Suporte a Joystick*: O jogo pode ser jogado com controle USB, oferecendo acessibilidade e conforto!
@@ -44,7 +44,7 @@ O *ReFloresta* é um jogo 2D desenvolvido em PyGame, onde o jogador:
 
 | Ação              | Teclado         | Joystick (Controle USB)     |
 |-------------------|-----------------|------------------------------|
-| Mover             | Setas (← ↑ ↓ →) | Alavanca analógica esquerda  |
+| Mover o personagem | Setas (← ↑ ↓ →) | Alavanca analógica esquerda  |
 | Correr            | Shift           | Alavanca analógica esquerda  |
 | Pular             | Barra de espaço | Botão A                      |
 | Coletar resíduo   | Tecla E         | Botão X                      |
