@@ -82,24 +82,24 @@ O *ReFloresta* é um jogo 2D desenvolvido em PyGame, onde o jogador:
 | [Menu Inicial](#menu-inicial) | [Tutorial do jogo para teclado e joystick](#tutorial-do-jogo-para-teclado-e-joystick) | [Gameplay - Mapas de Fases](#mapas-de-fases) | [Gameplay - Contador de Plantar Árvores](#contador-de-plantar-árvores) | [Plantando Árvores](#plantando-árvores)
 
 #### Menu Inicial:
-<img src="screenshots_refloresta/tela-menu.png" width="300">
+<img src="assets/screenshots_refloresta/tela-menu.png" width="300">
 
 #### Tutorial do jogo para teclado e joystick:
-<img src="screenshots_refloresta/tutorial_1.png" width="250">
-<img src="screenshots_refloresta/tutorial_3.png" width="250">
+<img src="assets/screenshots_refloresta/tutorial_1.png" width="250">
+<img src="assets/screenshots_refloresta/tutorial_3.png" width="250">
 
 #### Gameplay:
 ##### Mapas de Fases
-<img src="screenshots_refloresta/mapa-jogo-1.png" width="300">
-<img src="screenshots_refloresta/mapa-jogo-2.png" width="300">
+<img src="assets/screenshots_refloresta/mapa-jogo-1.png" width="300">
+<img src="assets/screenshots_refloresta/mapa-jogo-2.png" width="300">
 
 ##### Contador de Plantar Árvores
-<img src="screenshots_refloresta/contador-plantar-arvore.png
+<img src="assets/screenshots_refloresta/contador-plantar-arvore.png
 " width="300">
 
 ##### Plantando Árvores
-<img src="screenshots_refloresta/plantando-arvores-2.png" width="300">
-<img src="screenshots_refloresta/plantando-arvores.png" width="300">
+<img src="assets/screenshots_refloresta/plantando-arvores-2.png" width="300">
+<img src="assets/screenshots_refloresta/plantando-arvores.png" width="300">
 
 ---
 
